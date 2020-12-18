@@ -46,7 +46,6 @@ class BuyGogglesController: UIViewController {
                                      view.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
                                      view.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)])
     }
-    
 }
 
 
@@ -81,7 +80,16 @@ extension BuyGogglesController: UICollectionViewDataSource {
         
         let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section] }
         cell.imageView.image = goggleForBrand[indexPath.row].image
-        cell.skuLabel.text = goggleForBrand[indexPath.row].sku + (goggleForBrand[indexPath.row].qty <= K.lowStock ? (goggleForBrand[indexPath.row].qty <= 0 ? " - OUT OF STOCK" : " - LOW STOCK") : "") + "\n"
+        cell.skuLabel.text = goggleForBrand[indexPath.row].sku + (goggleForBrand[indexPath.row].qty <= K.lowStock ? (goggleForBrand[indexPath.row].qty <= 0 ? " - OUT OF STOCK" : " - LOW STOCK") : "") + "\n" + (goggleForBrand[indexPath.row].qtyOrdered != nil ? "Ordered: \(goggleForBrand[indexPath.row].qtyOrdered!)" : "")
+        
+        if goggleForBrand[indexPath.row].qtyOrdered != nil {
+            cell.layer.borderWidth = 2
+            cell.layer.cornerRadius = 10
+            cell.layer.borderColor = UIColor.green.cgColor
+        }
+        else {
+            cell.layer.borderWidth = 0
+        }
         
         return cell
     }
@@ -123,7 +131,8 @@ extension BuyGogglesController: UICollectionViewDelegate {
                 controller.brand = goggleForBrand[indexPath.row].brand
                 controller.image = goggleForBrand[indexPath.row].image
                 controller.itemDescription = goggleForBrand[indexPath.row].sku + " - " + goggleForBrand[indexPath.row].description
-                controller.qty = goggleForBrand[indexPath.row].qty
+                controller.qtyAvailable = goggleForBrand[indexPath.row].qty
+                controller.qtyOrdered = goggleForBrand[indexPath.row].qtyOrdered
                 
                 //Not sure about theses.....
                 controller.delegate = self
@@ -151,10 +160,19 @@ extension BuyGogglesController: UICollectionViewDelegate {
 // MARK: - GoggleDetailControllerDelegate
 
 extension BuyGogglesController: GoggleDetailControllerDelegate {
-    func goggleDetailController(_ controller: GoggleDetailController, didUpdateQty qty: Int) {
-//        if let indexPath = orderIndexPath {
-//            let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section] }
-//            goggleForBrand[indexPath.row].qtyOrdered = qty
-//        }
+    func goggleDetailController(_ controller: GoggleDetailController, didUpdateQty qtyOrdered: Int, forVendorNo vendorNo: String) {
+
+//        K.goggleData.first(where: { $0.vendorNo == vendorNo })?.qtyOrdered = qty
+//        K.goggleData.filter { $0.vendorNo == vendorNo }.first?.qtyOrdered = qty
+
+        //don't like this. Try something like above
+        for (i, data) in K.goggleData.enumerated() {
+            if data.vendorNo == vendorNo {
+                K.goggleData[i].qtyOrdered = qtyOrdered == 0 ? nil : qtyOrdered
+            }
+        }
+        
+        collectionView.reloadData()
     }
+    
 }

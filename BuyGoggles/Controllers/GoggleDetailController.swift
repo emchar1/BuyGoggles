@@ -8,7 +8,7 @@
 import UIKit
 
 protocol GoggleDetailControllerDelegate {
-    func goggleDetailController(_ controller: GoggleDetailController, didUpdateQty qty: Int)
+    func goggleDetailController(_ controller: GoggleDetailController, didUpdateQty qtyOrdered: Int, forVendorNo vendorNo: String)
 }
 
 class GoggleDetailController: UIViewController {
@@ -17,7 +17,8 @@ class GoggleDetailController: UIViewController {
     var image: UIImage!
     var brand: String!
     var itemDescription: String!
-    var qty: Int = 0
+    var qtyAvailable: Int = 0
+    var qtyOrdered: Int?
     
     var textField: UITextField!
     
@@ -85,6 +86,7 @@ class GoggleDetailController: UIViewController {
         textField.textColor = .black
         textField.textAlignment = .center
         textField.isEnabled = hasStock() ? true : false
+        textField.text = qtyOrdered != nil ? "\(qtyOrdered!)" : ""
         textField.becomeFirstResponder()
         textField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(textField)
@@ -110,57 +112,46 @@ class GoggleDetailController: UIViewController {
         qtyLabel.font = UIFont(name: "Avenir Next Condensed Italic", size: 12)
         qtyLabel.textColor = .gray
         qtyLabel.textAlignment = .center
-        qtyLabel.text = "Available qty: \(qty)"
+        qtyLabel.text = "Available qty: \(qtyAvailable)"
         qtyLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(qtyLabel)
         NSLayoutConstraint.activate([qtyLabel.topAnchor.constraint(equalTo: saveButton.bottomAnchor, constant: padding),
                                      qtyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      qtyLabel.widthAnchor.constraint(equalToConstant: 200),
                                      qtyLabel.heightAnchor.constraint(equalToConstant: 20)])
-        
-        
+
+
     }
-    
+
     func hasStock() -> Bool {
-        return qty > 0
+        return qtyAvailable > 0
     }
-    
+
     @objc func saveItem(_ sender: UIButton) {
         guard hasStock() else {
             dismiss(animated: true, completion: nil)
             return
         }
         
-        if let qtyEntered = textField.text,
-           let qtyEnteredInt = Int(qtyEntered),
-           qtyEntered != "" && qtyEnteredInt >= 0 && qtyEnteredInt <= K.maxQty {
+        if let qtyEnteredInt = Int(textField.text!),
+           qtyEnteredInt > K.maxQty {
             
-            if qtyEnteredInt > qty {
-                let alert = UIAlertController(title: "Warning", message: "Order may exceed available qty. Proceed with order?", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                alert.addAction(UIAlertAction(title: "Proceed", style: .default, handler: { _ in
-                    self.delegate?.goggleDetailController(self, didUpdateQty: qtyEnteredInt)
-                    self.dismiss(animated: true, completion: nil)
-                }))
-                
-                present(alert, animated: true, completion: nil)
-            }
-            else {
-                delegate?.goggleDetailController(self, didUpdateQty: qtyEnteredInt)
-                dismiss(animated: true, completion: nil)
-            }
-        }
-        else {
             let alert = UIAlertController(title: "Error", message: "To save your order, enter a valid qty between 0 and \(K.maxQty), or swipe down to cancel and return to the list.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            
             present(alert, animated: true, completion: nil)
+            
+        }
+        else {
+            delegate?.goggleDetailController(self,
+                                             didUpdateQty: Int(textField.text!) ?? 0,
+                                             forVendorNo: self.vendorNo)
+            dismiss(animated: true, completion: nil)
         }
     }
-    
+
     @objc func didTapScreen(_ sender: UITapGestureRecognizer) {
         let tapLocation = sender.location(in: view)
-        
+
         if tapLocation.isOutside(of: textField.bounds) {
             textField.endEditing(true)
         }
