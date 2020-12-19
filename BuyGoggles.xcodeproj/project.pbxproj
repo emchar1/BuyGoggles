@@ -14,12 +14,14 @@
 		EA46A0AA2585F91E0076ECBB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA46A0A92585F91E0076ECBB /* Assets.xcassets */; };
 		EA46A0AD2585F91E0076ECBB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA46A0AB2585F91E0076ECBB /* LaunchScreen.storyboard */; };
 		EA46A0BF2586046B0076ECBB /* GoggleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0BE2586046B0076ECBB /* GoggleData.swift */; };
-		EA46A0C225861DF70076ECBB /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0C125861DF70076ECBB /* CustomCell.swift */; };
+		EA46A0C225861DF70076ECBB /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0C125861DF70076ECBB /* CollectionCell.swift */; };
 		EA46A0DD2588A5B40076ECBB /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0DC2588A5B40076ECBB /* HeaderView.swift */; };
 		EA46A0E02588AB690076ECBB /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0DF2588AB690076ECBB /* FooterView.swift */; };
 		EA46A0E62589BD230076ECBB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0E52589BD230076ECBB /* Constants.swift */; };
 		EA46A0E92589DDA70076ECBB /* GoggleDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0E82589DDA70076ECBB /* GoggleDetailController.swift */; };
 		EA46A0EF258B3EAC0076ECBB /* TRInventory11-2020.csv in Resources */ = {isa = PBXBuildFile; fileRef = EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */; };
+		EA46A0FB258C96820076ECBB /* CheckoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0FA258C96820076ECBB /* CheckoutController.swift */; };
+		EA46A103258DEDB30076ECBB /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A102258DEDB30076ECBB /* TableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,12 +34,14 @@
 		EA46A0AC2585F91E0076ECBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EA46A0AE2585F91E0076ECBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EA46A0BE2586046B0076ECBB /* GoggleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoggleData.swift; sourceTree = "<group>"; };
-		EA46A0C125861DF70076ECBB /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		EA46A0C125861DF70076ECBB /* CollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
 		EA46A0DC2588A5B40076ECBB /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		EA46A0DF2588AB690076ECBB /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		EA46A0E52589BD230076ECBB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EA46A0E82589DDA70076ECBB /* GoggleDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoggleDetailController.swift; sourceTree = "<group>"; };
 		EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "TRInventory11-2020.csv"; sourceTree = "<group>"; };
+		EA46A0FA258C96820076ECBB /* CheckoutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutController.swift; sourceTree = "<group>"; };
+		EA46A102258DEDB30076ECBB /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +91,7 @@
 			children = (
 				EA46A0A42585F91D0076ECBB /* BuyGogglesController.swift */,
 				EA46A0E82589DDA70076ECBB /* GoggleDetailController.swift */,
+				EA46A0FA258C96820076ECBB /* CheckoutController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -95,9 +100,10 @@
 			isa = PBXGroup;
 			children = (
 				EA46A0A62585F91D0076ECBB /* Main.storyboard */,
-				EA46A0C125861DF70076ECBB /* CustomCell.swift */,
+				EA46A0C125861DF70076ECBB /* CollectionCell.swift */,
 				EA46A0DC2588A5B40076ECBB /* HeaderView.swift */,
 				EA46A0DF2588AB690076ECBB /* FooterView.swift */,
+				EA46A102258DEDB30076ECBB /* TableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -187,7 +193,9 @@
 				EA46A0E02588AB690076ECBB /* FooterView.swift in Sources */,
 				EA46A0DD2588A5B40076ECBB /* HeaderView.swift in Sources */,
 				EA46A0A12585F91D0076ECBB /* AppDelegate.swift in Sources */,
-				EA46A0C225861DF70076ECBB /* CustomCell.swift in Sources */,
+				EA46A0C225861DF70076ECBB /* CollectionCell.swift in Sources */,
+				EA46A0FB258C96820076ECBB /* CheckoutController.swift in Sources */,
+				EA46A103258DEDB30076ECBB /* TableViewCell.swift in Sources */,
 				EA46A0E92589DDA70076ECBB /* GoggleDetailController.swift in Sources */,
 				EA46A0BF2586046B0076ECBB /* GoggleData.swift in Sources */,
 				EA46A0A32585F91D0076ECBB /* SceneDelegate.swift in Sources */,

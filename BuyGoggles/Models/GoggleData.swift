@@ -13,6 +13,7 @@ struct GoggleData: Comparable {
     var sku: String
     var description: String
     var image: UIImage
+    var unitPrice: Float
     var qty: Int
     var qtyOrdered: Int?
     

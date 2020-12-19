@@ -11,19 +11,18 @@ class BuyGogglesController: UIViewController {
     
     // MARK: - Properties
     
-    static let reuseIdentifier = "CVCell"
     var orderIndexPath: IndexPath?
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: CustomCell.padding,
-                                           left: CustomCell.padding,
-                                           bottom: CustomCell.padding,
-                                           right: CustomCell.padding)
+        layout.sectionInset = UIEdgeInsets(top: CollectionCell.padding,
+                                           left: CollectionCell.padding,
+                                           bottom: CollectionCell.padding,
+                                           right: CollectionCell.padding)
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(CustomCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        cv.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.identifier)
         cv.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.reuseIdentifier)
         cv.register(FooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterView.reuseIdentifier)
         return cv
@@ -54,7 +53,7 @@ class BuyGogglesController: UIViewController {
 extension BuyGogglesController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        return CGSize(width: CustomCell.widthImageView, height: CustomCell.heightStack)
+        return CGSize(width: CollectionCell.widthImageView, height: CollectionCell.heightStack)
     }
 }
 
@@ -74,7 +73,7 @@ extension BuyGogglesController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BuyGogglesController.reuseIdentifier, for: indexPath) as! CustomCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionCell.identifier, for: indexPath) as! CollectionCell
         
         cell.backgroundColor = .white
         
@@ -83,12 +82,14 @@ extension BuyGogglesController: UICollectionViewDataSource {
         cell.skuLabel.text = goggleForBrand[indexPath.row].sku + (goggleForBrand[indexPath.row].qty <= K.lowStock ? (goggleForBrand[indexPath.row].qty <= 0 ? " - OUT OF STOCK" : " - LOW STOCK") : "") + "\n" + (goggleForBrand[indexPath.row].qtyOrdered != nil ? "Ordered: \(goggleForBrand[indexPath.row].qtyOrdered!)" : "")
         
         if goggleForBrand[indexPath.row].qtyOrdered != nil {
-            cell.layer.borderWidth = 2
+            cell.layer.borderWidth = 3
             cell.layer.cornerRadius = 10
-            cell.layer.borderColor = UIColor.green.cgColor
+            cell.layer.borderColor = UIColor.lightGray.cgColor
+            cell.clipsToBounds = true
         }
         else {
             cell.layer.borderWidth = 0
+            cell.clipsToBounds = false
         }
         
         return cell
@@ -144,7 +145,6 @@ extension BuyGogglesController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         performSegue(withIdentifier: "showDetail", sender: nil)
-        print(indexPath.row)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {

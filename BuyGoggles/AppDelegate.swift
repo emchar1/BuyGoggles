@@ -58,7 +58,6 @@ extension AppDelegate {
                 if index > 0, line.count > 0 {
                     let columns = line.components(separatedBy: ",")
                     
-                    //O(n^2) BAD!!! Luckily the inventory report is small.
                     if columns[K.columnCategory] == "GOGGLES" {
                         if !K.goggleBrands.contains(columns[K.columnBrand]) {
                             K.goggleBrands.append(columns[K.columnBrand])
@@ -68,6 +67,7 @@ extension AppDelegate {
                         let sku = columns[K.columnSKU]
                         let brand = columns[K.columnBrand]
                         let itemDescription = columns[K.columnDescription]
+                        let unitPrice = columns[K.columnUnitPrice]
                         let qty = columns[K.columnQty]
                         
                         //Only add GoggleData if there's an image associated with it. Or should we include all goggles???
@@ -77,6 +77,7 @@ extension AppDelegate {
                                                            sku: sku,
                                                            description: itemDescription,
                                                            image: image,
+                                                           unitPrice: Float(unitPrice) ?? -9999,
                                                            qty: Int(qty) ?? -9999))
                         }
                     }

@@ -58,8 +58,8 @@ class GoggleDetailController: UIViewController {
         view.addSubview(imageView)
         NSLayoutConstraint.activate([imageView.topAnchor.constraint(equalTo: brandLabel.bottomAnchor, constant: padding),
                                      imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                     imageView.widthAnchor.constraint(equalToConstant: CustomCell.widthImageView * 2),
-                                     imageView.heightAnchor.constraint(equalToConstant: CustomCell.heightImageView * 2)])
+                                     imageView.widthAnchor.constraint(equalToConstant: CollectionCell.widthImageView * 2),
+                                     imageView.heightAnchor.constraint(equalToConstant: CollectionCell.heightImageView * 2)])
                 
         let descriptionLabel = UILabel()
         descriptionLabel.font = UIFont(name: "Avenir Next Condensed Regular", size: 14)
@@ -73,7 +73,7 @@ class GoggleDetailController: UIViewController {
                                      view.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor),
                                      descriptionLabel.heightAnchor.constraint(equalToConstant: 20)])
         
-        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont(name: "Avenir Next Condensed", size: 14)!,
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont(name: "Avenir Next Condensed Regular", size: 14)!,
                                                          .foregroundColor: UIColor.gray]
         textField = UITextField()
         textField.attributedPlaceholder = NSAttributedString(string: hasStock() ? "Enter qty" : "Out of Stock", attributes: attributes)
@@ -96,7 +96,7 @@ class GoggleDetailController: UIViewController {
         
         let saveButton = UIButton(type: .system)
         saveButton.backgroundColor = .black
-        saveButton.setTitle(hasStock() ? "Save" : "Go Back", for: .normal)
+        saveButton.setTitle(hasStock() ? (qtyOrdered != nil ? "Update Cart" : "Add to Cart") : "Go Back", for: .normal)
         saveButton.titleLabel?.font = UIFont(name: "Avenir Next Demi Bold", size: 18)
         saveButton.tintColor = .white
         saveButton.layer.cornerRadius = 10
@@ -119,7 +119,6 @@ class GoggleDetailController: UIViewController {
                                      qtyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      qtyLabel.widthAnchor.constraint(equalToConstant: 200),
                                      qtyLabel.heightAnchor.constraint(equalToConstant: 20)])
-
 
     }
 

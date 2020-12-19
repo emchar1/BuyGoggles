@@ -29,6 +29,6 @@ class HeaderView: UICollectionReusableView {
         //Makes the frame the entirety of the header view. Neat!
         label.frame = bounds
         
-        label.frame.origin.x = CustomCell.padding
+        label.frame.origin.x = CollectionCell.padding
     }
 }

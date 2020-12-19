@@ -14,7 +14,6 @@ class FooterView: UICollectionReusableView {
         let label = UILabel()
         label.text = ""
         label.textAlignment = .left
-        label.font = UIFont(name: "Avenir Next Condensed Medium Italic", size: 14)
         return label
     }()
     

@@ -13,13 +13,28 @@ struct K {
     static let columnCategory = 3
     static let columnBrand = 4
     static let columnDescription = 5
-    static let columnQty = 6
+    static let columnUnitPrice = 6
+    static let columnQty = 7
 
     static let lowStock = 100
     static let maxQty = 9999
 
     static var goggleData: [GoggleData] = []
     static var goggleBrands: [String] = []
+    static var shoppingCart: [GoggleData] {
+        return goggleData.filter { $0.qtyOrdered != nil }
+    }
+    static var orderedBrands: [String] {
+        var brands: [String] = []
+        
+        for item in shoppingCart {
+            if !brands.contains(item.brand) {
+                brands.append(item.brand)
+            }
+        }
+        
+        return brands
+    }
 }
 
 extension CGPoint {

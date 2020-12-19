@@ -1,5 +1,5 @@
 //
-//  CustomCell.swift
+//  CollectionCell.swift
 //  BuyGoggles
 //
 //  Created by Eddie Char on 12/13/20.
@@ -7,10 +7,11 @@
 
 import UIKit
 
-class CustomCell: UICollectionViewCell {
+class CollectionCell: UICollectionViewCell {
     
     // MARK: - Properties
     
+    static let identifier = "CVCell"
     static let padding: CGFloat = 8
     static let widthImageView: CGFloat = UIScreen.main.bounds.width / 3 - padding * 1.5
     static let heightImageView: CGFloat = widthImageView * 0.465
@@ -50,8 +51,8 @@ class CustomCell: UICollectionViewCell {
                                      contentView.bottomAnchor.constraint(equalTo: vStack.bottomAnchor),
                                      contentView.trailingAnchor.constraint(equalTo: vStack.trailingAnchor)])
         
-        NSLayoutConstraint.activate([imageView.heightAnchor.constraint(equalToConstant: CustomCell.heightImageView),
-                                     skuLabel.heightAnchor.constraint(equalToConstant: CustomCell.heightDescriptionLabel)])
+        NSLayoutConstraint.activate([imageView.heightAnchor.constraint(equalToConstant: CollectionCell.heightImageView),
+                                     skuLabel.heightAnchor.constraint(equalToConstant: CollectionCell.heightDescriptionLabel)])
     }
     
     required init?(coder: NSCoder) {
