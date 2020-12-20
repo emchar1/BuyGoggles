@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MessageUI
 
 class CheckoutController: UIViewController {
     
@@ -25,7 +26,7 @@ class CheckoutController: UIViewController {
     let emptyCartLabel: UILabel = {
         let label = UILabel()
         label.text = "Your shopping cart is empty."
-        label.font = UIFont(name: "Avenir Next Condensed Regular", size: 14)
+        label.font = UIFont(name: "Avenir Next Condensed Regular", size: 18)
         label.textAlignment = .center
         label.isHidden = true
         return label
@@ -36,8 +37,8 @@ class CheckoutController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Checkout", for: .normal)
         button.titleLabel?.font = UIFont(name: "Avenir Next Demi Bold", size: 18)
-        button.backgroundColor = .black
-        button.tintColor = .white
+        button.backgroundColor = UIColor(named: "colorButton")
+        button.tintColor = UIColor(named: "colorButtonText")
         button.layer.cornerRadius = 10
         button.isHidden = true
         button.addTarget(self, action: #selector(checkoutPressed), for: .touchUpInside)
@@ -97,13 +98,6 @@ class CheckoutController: UIViewController {
                                       width: 150,
                                       height: 60)
     }
-    
-    
-    // MARK: - Checkout
-    
-    @objc func checkoutPressed(_ sender: UIButton) {
-        print("Checkout!")
-    }
 }
 
 
@@ -118,10 +112,9 @@ extension CheckoutController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let gogglesForBrand = K.shoppingCart.filter { $0.brand == K.orderedBrands[indexPath.section] }
+        let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as! TableViewCell
         let formatter = NumberFormatter()
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as! TableViewCell
-        
         cell.skuLabel.text = gogglesForBrand[indexPath.row].sku
         cell.itemDescLabel.text = gogglesForBrand[indexPath.row].description
 
@@ -160,4 +153,50 @@ extension CheckoutController: UITableViewDelegate, UITableViewDataSource {
 //    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 //        return K.orderedBrands[section]
 //    }
+}
+
+
+// MARK: - Checkout
+
+extension CheckoutController: MFMailComposeViewControllerDelegate {
+
+    @objc func checkoutPressed(_ sender: UIButton) {
+        var csvItems: [[String]] = [["BRAND", "VENDOR NO", "TR SKU", "ITEM DESCRIPTION", "QTY ORDERED", "UNIT PRICE", "TOTAL COST"]]
+        
+        for item in K.shoppingCart {
+            let totalCost: Float = Float(item.qtyOrdered!) * item.unitPrice
+            let csvItem: [String] = [item.brand, item.vendorNo, item.sku, item.description, String(item.qtyOrdered!), String(item.unitPrice), String(totalCost)]
+            
+            csvItems.append(csvItem)
+        }
+        
+        mailOrder(for: CreateCSV.commaSeparatedValueDataForLines(lines: csvItems))
+    }
+    
+    func mailOrder(for data: Data) {
+        guard MFMailComposeViewController.canSendMail() else {
+            print("Unable to export from Simulator. Try it on a device.")
+            return
+        }
+
+        
+        let mail = MFMailComposeViewController()
+        let date = Date()
+        let orderNo: Int = 10001
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy h:mm a"
+
+        mail.mailComposeDelegate = self
+        mail.setToRecipients(["grady@100percent.com"])
+        mail.setSubject("TR Goggle Order #\(orderNo) - \(formatter.string(from: date))")
+        mail.setMessageBody("Make it rain.", isHTML: true)
+        mail.addAttachmentData(data, mimeType: "text/csv", fileName: "TRGoggle\(orderNo).csv")
+        
+        present(mail, animated: true)
+    }
+    
+    //This is required to dismiss the mail controller!
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
 }

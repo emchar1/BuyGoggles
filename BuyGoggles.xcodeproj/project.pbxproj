@@ -22,6 +22,7 @@
 		EA46A0EF258B3EAC0076ECBB /* TRInventory11-2020.csv in Resources */ = {isa = PBXBuildFile; fileRef = EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */; };
 		EA46A0FB258C96820076ECBB /* CheckoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0FA258C96820076ECBB /* CheckoutController.swift */; };
 		EA46A103258DEDB30076ECBB /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A102258DEDB30076ECBB /* TableViewCell.swift */; };
+		EA9FD858258F1866000E1CFB /* CreateCSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9FD857258F1866000E1CFB /* CreateCSV.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "TRInventory11-2020.csv"; sourceTree = "<group>"; };
 		EA46A0FA258C96820076ECBB /* CheckoutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutController.swift; sourceTree = "<group>"; };
 		EA46A102258DEDB30076ECBB /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		EA9FD857258F1866000E1CFB /* CreateCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCSV.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */,
 				EA46A0BE2586046B0076ECBB /* GoggleData.swift */,
 				EA46A0E52589BD230076ECBB /* Constants.swift */,
+				EA9FD857258F1866000E1CFB /* CreateCSV.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				EA46A0E92589DDA70076ECBB /* GoggleDetailController.swift in Sources */,
 				EA46A0BF2586046B0076ECBB /* GoggleData.swift in Sources */,
 				EA46A0A32585F91D0076ECBB /* SceneDelegate.swift in Sources */,
+				EA9FD858258F1866000E1CFB /* CreateCSV.swift in Sources */,
 				EA46A0E62589BD230076ECBB /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

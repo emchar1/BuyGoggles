@@ -84,7 +84,7 @@ extension BuyGogglesController: UICollectionViewDataSource {
         if goggleForBrand[indexPath.row].qtyOrdered != nil {
             cell.layer.borderWidth = 3
             cell.layer.cornerRadius = 10
-            cell.layer.borderColor = UIColor.lightGray.cgColor
+            cell.layer.borderColor = UIColor(named: "colorHighlight")!.cgColor
             cell.clipsToBounds = true
         }
         else {
@@ -171,6 +171,8 @@ extension BuyGogglesController: GoggleDetailControllerDelegate {
                 K.goggleData[i].qtyOrdered = qtyOrdered == 0 ? nil : qtyOrdered
             }
         }
+        
+        tabBarController?.tabBar.items?.last?.badgeValue = "\(K.shoppingCart.count)"
         
         collectionView.reloadData()
     }
