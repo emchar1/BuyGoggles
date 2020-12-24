@@ -22,6 +22,7 @@
 		EA46A0EF258B3EAC0076ECBB /* TRInventory11-2020.csv in Resources */ = {isa = PBXBuildFile; fileRef = EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */; };
 		EA46A0FB258C96820076ECBB /* CheckoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0FA258C96820076ECBB /* CheckoutController.swift */; };
 		EA46A103258DEDB30076ECBB /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A102258DEDB30076ECBB /* TableViewCell.swift */; };
+		EA95265A25949CD800808F42 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA95265925949CD800808F42 /* TitleCell.swift */; };
 		EA9FD858258F1866000E1CFB /* CreateCSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9FD857258F1866000E1CFB /* CreateCSV.swift */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "TRInventory11-2020.csv"; sourceTree = "<group>"; };
 		EA46A0FA258C96820076ECBB /* CheckoutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutController.swift; sourceTree = "<group>"; };
 		EA46A102258DEDB30076ECBB /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		EA95265925949CD800808F42 /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 		EA9FD857258F1866000E1CFB /* CreateCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCSV.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				EA46A0A62585F91D0076ECBB /* Main.storyboard */,
+				EA95265925949CD800808F42 /* TitleCell.swift */,
 				EA46A0C125861DF70076ECBB /* CollectionCell.swift */,
 				EA46A0DC2588A5B40076ECBB /* HeaderView.swift */,
 				EA46A0DF2588AB690076ECBB /* FooterView.swift */,
@@ -195,6 +198,7 @@
 				EA46A0A52585F91D0076ECBB /* BuyGogglesController.swift in Sources */,
 				EA46A0E02588AB690076ECBB /* FooterView.swift in Sources */,
 				EA46A0DD2588A5B40076ECBB /* HeaderView.swift in Sources */,
+				EA95265A25949CD800808F42 /* TitleCell.swift in Sources */,
 				EA46A0A12585F91D0076ECBB /* AppDelegate.swift in Sources */,
 				EA46A0C225861DF70076ECBB /* CollectionCell.swift in Sources */,
 				EA46A0FB258C96820076ECBB /* CheckoutController.swift in Sources */,

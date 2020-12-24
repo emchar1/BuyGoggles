@@ -10,8 +10,8 @@ import UIKit
 class BuyGogglesController: UIViewController {
     
     // MARK: - Properties
-    
     var orderIndexPath: IndexPath?
+    
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -20,12 +20,13 @@ class BuyGogglesController: UIViewController {
                                            bottom: CollectionCell.padding,
                                            right: CollectionCell.padding)
         
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.identifier)
-        cv.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.reuseIdentifier)
-        cv.register(FooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterView.reuseIdentifier)
-        return cv
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.identifier)
+        collectionView.register(TitleCell.self, forCellWithReuseIdentifier: TitleCell.identifier)
+        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.reuseIdentifier)
+        collectionView.register(FooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterView.reuseIdentifier)
+        return collectionView
     }()
     
     
@@ -52,6 +53,10 @@ class BuyGogglesController: UIViewController {
 
 extension BuyGogglesController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        guard indexPath.section > 0 else {
+            return CGSize(width: view.frame.width, height: view.frame.width)
+        }
 
         return CGSize(width: CollectionCell.widthImageView, height: CollectionCell.heightStack)
     }
@@ -61,25 +66,36 @@ extension BuyGogglesController: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionViewDataSource
 
 extension BuyGogglesController: UICollectionViewDataSource {
-    
+        
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return K.goggleBrands.count
+        return K.goggleBrands.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[section] }
+        guard section > 0 else {
+            return 1
+        }
+        
+        let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[section - 1] }
         
         return goggleForBrand.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard indexPath.section > 0 else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitleCell.identifier, for: indexPath) as! TitleCell
+            
+            return cell
+        }
+        
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionCell.identifier, for: indexPath) as! CollectionCell
         
         cell.backgroundColor = .white
         
-        let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section] }
+        let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section - 1] }
         cell.imageView.image = goggleForBrand[indexPath.row].image
-        cell.skuLabel.text = goggleForBrand[indexPath.row].sku + (goggleForBrand[indexPath.row].qty <= K.lowStock ? (goggleForBrand[indexPath.row].qty <= 0 ? " - OUT OF STOCK" : " - LOW STOCK") : "") + "\n" + (goggleForBrand[indexPath.row].qtyOrdered != nil ? "Ordered: \(goggleForBrand[indexPath.row].qtyOrdered!)" : "")
+        cell.skuLabel.text = goggleForBrand[indexPath.row].sku + " - " + goggleForBrand[indexPath.row].description + "\n" + (goggleForBrand[indexPath.row].qtyOrdered != nil ? "Ordered: \(goggleForBrand[indexPath.row].qtyOrdered!)" : "")
         
         if goggleForBrand[indexPath.row].qtyOrdered != nil {
             cell.layer.borderWidth = 3
@@ -102,7 +118,7 @@ extension BuyGogglesController: UICollectionViewDataSource {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                          withReuseIdentifier: HeaderView.reuseIdentifier,
                                                                          for: indexPath) as! HeaderView
-            header.label.text = K.goggleBrands[indexPath.section]
+            header.label.text = K.goggleBrands[indexPath.section - 1]
             header.configure()
             return header
         case UICollectionView.elementKindSectionFooter:
@@ -126,7 +142,7 @@ extension BuyGogglesController: UICollectionViewDelegate {
             let controller = segue.destination as! GoggleDetailController
             
             if let indexPath = collectionView.indexPathsForSelectedItems?.first {
-                let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section] }
+                let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section - 1] }
                 
                 controller.vendorNo = goggleForBrand[indexPath.row].vendorNo
                 controller.brand = goggleForBrand[indexPath.row].brand
@@ -144,16 +160,40 @@ extension BuyGogglesController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard indexPath.section > 0 else {
+            return
+        }
+        
         performSegue(withIdentifier: "showDetail", sender: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard section > 0 else {
+            return .zero
+        }
+        
         return CGSize(width: view.frame.size.width, height: 40)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard section > 0 else {
+            return .zero
+        }
+        
         return CGSize(width: view.frame.size.width, height: 40)
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let newHeight = scrollHeightAnchor.constant - scrollView.contentOffset.y / 2
+//        
+//        guard newHeight > 0 && newHeight < scrollHeightMax else {
+//            return
+//        }
+//
+//        scrollHeightAnchor.constant = newHeight
+//        print("offset: \(scrollView.contentOffset.y), origin: \(scrollView.bounds.origin.y), anchor: \(scrollHeightAnchor.constant)")
+    }
+    
 }
 
 

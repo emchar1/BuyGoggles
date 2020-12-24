@@ -15,7 +15,7 @@ class CollectionCell: UICollectionViewCell {
     static let padding: CGFloat = 8
     static let widthImageView: CGFloat = UIScreen.main.bounds.width / 3 - padding * 1.5
     static let heightImageView: CGFloat = widthImageView * 0.465
-    static let heightDescriptionLabel: CGFloat = 40
+    static let heightDescriptionLabel: CGFloat = 60
     static let heightStack: CGFloat = heightImageView + heightDescriptionLabel
     
     var imageView: UIImageView = {
@@ -30,7 +30,7 @@ class CollectionCell: UICollectionViewCell {
         label.font = UIFont(name: "Avenir Next Condensed Regular", size: 12.0)
         label.textColor = .black
         label.textAlignment = .center
-        label.numberOfLines = 2
+        label.numberOfLines = 3
         return label
     }()
     
