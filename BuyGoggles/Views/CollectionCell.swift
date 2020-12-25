@@ -50,7 +50,7 @@ class CollectionCell: UICollectionViewCell {
                                      vStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                                      contentView.bottomAnchor.constraint(equalTo: vStack.bottomAnchor),
                                      contentView.trailingAnchor.constraint(equalTo: vStack.trailingAnchor)])
-        
+
         NSLayoutConstraint.activate([imageView.heightAnchor.constraint(equalToConstant: CollectionCell.heightImageView),
                                      skuLabel.heightAnchor.constraint(equalToConstant: CollectionCell.heightDescriptionLabel)])
     }

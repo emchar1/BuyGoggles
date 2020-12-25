@@ -12,6 +12,13 @@ class BuyGogglesController: UIViewController {
     // MARK: - Properties
     var orderIndexPath: IndexPath?
     
+    lazy var titleSize: (width: CGFloat, height: CGFloat) = {
+        let insetPadding: CGFloat = 8
+        let width = view.frame.width - 2 * insetPadding
+        let heightRatio: CGFloat = 0.85246
+        return (width, width * heightRatio)
+    }()
+    
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -45,6 +52,21 @@ class BuyGogglesController: UIViewController {
                                      collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                                      view.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
                                      view.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)])
+
+        let logoImageView = UIImageView()
+        logoImageView.image = UIImage(named: "logo.svg")?.withRenderingMode(.alwaysTemplate)
+        logoImageView.tintColor = .black
+        logoImageView.contentMode = .scaleAspectFit
+        navigationItem.titleView = logoImageView
+        navigationItem.titleView?.alpha = 0
+//        navigationItem.titleView?.backgroundColor = .white
+//        navigationController?.navigationBar.barTintColor = .white
+        navigationController?.navigationBar.isTranslucent = false
+        let appearance = UINavigationBarAppearance()
+        appearance.shadowColor = .lightGray
+        appearance.backgroundColor = .white
+        navigationController?.navigationBar.standardAppearance = appearance
+                
     }
 }
 
@@ -55,7 +77,7 @@ extension BuyGogglesController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         guard indexPath.section > 0 else {
-            return CGSize(width: view.frame.width, height: view.frame.width)
+            return CGSize(width: titleSize.width, height: titleSize.height)
         }
 
         return CGSize(width: CollectionCell.widthImageView, height: CollectionCell.heightStack)
@@ -184,6 +206,18 @@ extension BuyGogglesController: UICollectionViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        navigationItem.titleView?.alpha = (scrollView.contentOffset.y - titleSize.height / 2) / (titleSize.height / 2)
+//        if navigationItem.titleView!.alpha >= 1.0 {
+//            appearance.shadowColor = .lightGray
+//            navigationController?.navigationBar.standardAppearance = appearance
+//        }
+        
+//        if scrollView.contentOffset.y > view.frame.width - 16 {
+//            navigationController?.setNavigationBarHidden(false, animated: true)
+//        }
+//        else {
+//            navigationController?.setNavigationBarHidden(true, animated: true)
+//        }
 //        let newHeight = scrollHeightAnchor.constant - scrollView.contentOffset.y / 2
 //        
 //        guard newHeight > 0 && newHeight < scrollHeightMax else {
@@ -212,7 +246,7 @@ extension BuyGogglesController: GoggleDetailControllerDelegate {
             }
         }
         
-        tabBarController?.tabBar.items?.last?.badgeValue = "\(K.shoppingCart.count)"
+        tabBarController?.tabBar.items?.last?.badgeValue = K.shoppingCart.count > 0 ? "\(K.shoppingCart.count)" : nil
         
         collectionView.reloadData()
     }
