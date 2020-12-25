@@ -27,24 +27,39 @@ class CheckoutController: UIViewController {
         let label = UILabel()
         label.text = "Your shopping cart is empty."
         label.font = UIFont(name: "Avenir Next Condensed Regular", size: 18)
+        label.textColor = .black
+        label.textAlignment = .center
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let shoppingCartTitle: UILabel = {
+        let label = UILabel()
+        label.text = "Your Shopping Cart Items"
+        label.textColor = .black
+        label.font = UIFont(name: "Avenir Next Condensed Demi Bold", size: 18)
         label.textAlignment = .center
         label.isHidden = true
         return label
     }()
+    
     var scrollView: UIScrollView!
     var tableView: UITableView!
     let checkoutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Submit Order", for: .normal)
         button.titleLabel?.font = UIFont(name: "Avenir Next Demi Bold", size: 18)
-        button.backgroundColor = UIColor(named: "colorButton")
-        button.tintColor = UIColor(named: "colorButtonText")
+        button.backgroundColor = .black
+        button.tintColor = .white
         button.layer.cornerRadius = 10
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(checkoutPressed), for: .touchUpInside)
         return button
     }()
+    
+    var snowView: SnowView!
 
 
     // MARK: - Initialization
@@ -52,18 +67,31 @@ class CheckoutController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .gray
+        
         scrollView = UIScrollView(frame: CGRect(x: 0,
                                                 y: 0,
                                                 width: view.frame.width,
                                                 height: view.frame.height))
         scrollView.contentSize = CGSize(width: scrollView.frame.width, height: scrollHeight)
         view.addSubview(scrollView)
+        
+//        let titleView = UIView(frame: CGRect(x: padding, y: padding, width: scrollView.frame.width - 2 * padding, height: cellHeight * 2))
+//        let titleLabel = UILabel(frame: titleView.frame)
+//        titleLabel.textAlignment = .center
+//        titleLabel.font = UIFont(name: "Avenir Next Condensed Demi Bold", size: 18)
+//        titleLabel.text = "Shopping Cart"
+//        titleLabel.tintColor = UIColor(named: "colorButton")
+//        titleView.addSubview(titleLabel)
+//        titleView.backgroundColor = .orange
+//        scrollView.addSubview(titleView)
 
         tableView = UITableView(frame: CGRect(x: padding,
-                                              y: tvPadding,
+                                              y: tvPadding + cellHeight * 2,
                                               width: scrollView.frame.width - 2 * padding,
                                               height: 0))
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
+        tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
@@ -71,10 +99,16 @@ class CheckoutController: UIViewController {
         tableView.allowsSelection = false
         scrollView.addSubview(tableView)
 
-        emptyCartLabel.frame = CGRect(x: 0, y: tvPadding, width: scrollView.frame.width, height: cellHeight)
+//        emptyCartLabel.frame = CGRect(x: 0, y: tvPadding, width: scrollView.frame.width, height: cellHeight)
         scrollView.addSubview(emptyCartLabel)
-        view.addSubview(checkoutButton)
+        NSLayoutConstraint.activate([emptyCartLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                     emptyCartLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)])
         
+
+        shoppingCartTitle.frame = CGRect(x: 0, y: tvPadding, width: scrollView.frame.width, height: cellHeight * 2)
+        scrollView.addSubview(shoppingCartTitle)
+
+        view.addSubview(checkoutButton)
         NSLayoutConstraint.activate([checkoutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      view.bottomAnchor.constraint(equalTo: checkoutButton.bottomAnchor, constant: 40),
                                      checkoutButton.widthAnchor.constraint(equalToConstant: 150),
@@ -88,6 +122,18 @@ class CheckoutController: UIViewController {
         navigationItem.titleView?.backgroundColor = .white
         navigationController?.navigationBar.barTintColor = .white
         navigationController?.navigationBar.isTranslucent = false
+        
+        //add the snow effect layer
+        snowView = SnowView(frame: CGRect(x: -150, y: -100, width: 300, height: 50))
+        let snowClipView = UIView(frame: view.frame.offsetBy(dx: 0, dy: 0))
+        snowClipView.clipsToBounds = true
+        snowClipView.addSubview(snowView)
+        scrollView.addSubview(snowClipView)
+        
+        UIView.animate(withDuration: 0.5, delay: 3.0, options: .curveLinear, animations: {
+            self.view.backgroundColor = .white
+            self.snowView.alpha = 0
+        }, completion: nil)
     }
 
     //Need to reload the tableView in a separate method!!
@@ -102,12 +148,15 @@ class CheckoutController: UIViewController {
         super.viewDidAppear(animated)
 
         emptyCartLabel.isHidden = K.shoppingCart.isEmpty ? false : true
+        shoppingCartTitle.isHidden = K.shoppingCart.isEmpty ? true : false
         tableView.isHidden = K.shoppingCart.isEmpty ? true : false
         checkoutButton.isHidden = K.shoppingCart.isEmpty ? true : false
 
         //Resize the tableView height to its content size.
         tableView.frame.size.height = tableView.contentSize.height
         scrollView.contentSize.height = scrollHeight
+        
+        
     }
 }
 
@@ -184,7 +233,7 @@ extension CheckoutController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard section < K.orderedBrands.count else {
-            return 0
+            return cellHeight / 3
         }
         
         return cellHeight
@@ -192,13 +241,16 @@ extension CheckoutController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section < K.orderedBrands.count else {
-            return nil
+            let view = UIView()
+            view.backgroundColor = .clear
+            return view
         }
         
         let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: cellHeight))
         let label = UILabel(frame: view.frame)
         label.text = K.orderedBrands[section]
         label.font = UIFont(name: "Avenir Next Condensed Demi Bold Italic", size: 18)
+        label.textColor = .black
         view.addSubview(label)
 
         return view

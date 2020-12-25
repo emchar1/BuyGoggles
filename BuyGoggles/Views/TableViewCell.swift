@@ -19,6 +19,7 @@ class TableLabel: UILabel {
         self.font = labelFont
         self.text = text
         self.textAlignment = textAlignment
+        self.textColor = .black
     }
     
     required init?(coder: NSCoder) {
@@ -81,6 +82,8 @@ class TableViewCell: UITableViewCell {
                                  y: padding,
                                  width: 75,
                                  height: contentView.frame.height - padding * 2)
+        
+        backgroundColor = .clear
     }
     
 //    override func prepareForReuse() {
