@@ -24,6 +24,7 @@ class GoggleDetailController: UIViewController {
     var qtyOrdered: Int?
     
     var textField: UITextField!
+    var invalidQtyLabel: UILabel!
     var delegate: GoggleDetailControllerDelegate?
     
     
@@ -99,6 +100,18 @@ class GoggleDetailController: UIViewController {
                                      textField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      textField.widthAnchor.constraint(equalToConstant: 75)])
         
+        invalidQtyLabel = UILabel()
+        invalidQtyLabel.font = UIFont(name: "Avenir Next Condensed Regular", size: 12)
+        invalidQtyLabel.text = "Invalid qty!"
+        invalidQtyLabel.alpha = 0
+        invalidQtyLabel.textColor = .red
+        invalidQtyLabel.textAlignment = .center
+        invalidQtyLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(invalidQtyLabel)
+        NSLayoutConstraint.activate([invalidQtyLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: padding * 0.5),
+                                     invalidQtyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                     invalidQtyLabel.widthAnchor.constraint(equalToConstant: view.bounds.width)])
+        
         let saveButton = UIButton(type: .system)
         saveButton.backgroundColor = .black
         saveButton.setTitle(hasStock() ? (qtyOrdered != nil ? "Update Cart" : "Add to Cart") : "Go Back", for: .normal)
@@ -170,23 +183,39 @@ class GoggleDetailController: UIViewController {
 
 extension GoggleDetailController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        //Prevent leading zeroes
-        if textField.text?.count == 0 && string == "0" {
-            invalidEntryAnimation(for: textField)
+        guard let currentText = textField.text else {
+            return true
+        }
+        
+//        //Prevent leading zeroes
+//        if textField.text?.count == 0 && string == "0" {
+//            invalidEntryAnimation(for: textField)
+//            return false
+//        }
+        
+        //Prevent double leading zeroes
+        if currentText == "0" && string == "0" {
             return false
         }
         
-        //Prevent entry of >4 digits
-        if (textField.text! + string).count > String(K.maxQty).count {
-            invalidEntryAnimation(for: textField)
+        //Replaces leading zero with actual non-zero digit that was typed
+        if currentText == "0" && string != "0" {
+            textField.text = ""
+            return true
+        }
+        
+        //Prevent entry of >maxQty digits
+        if (currentText + string).count > String(K.maxQty).count {
+            displayInvalidQtyLabel(with: "Max qty allowed is \(K.maxQty).")
+            animateInvalidEntry(in: textField)
             return false
         }
         
         //Prevent copy/paste of non-digit text
         let allowedCharacterSet = CharacterSet.init(charactersIn: "0123456789")
-        let textCharacterSet = CharacterSet.init(charactersIn: textField.text! + string)
+        let textCharacterSet = CharacterSet.init(charactersIn: currentText + string)
         if !allowedCharacterSet.isSuperset(of: textCharacterSet) {
-            invalidEntryAnimation(for: textField)
+            animateInvalidEntry(in: textField)
             return false
         }
         
@@ -194,7 +223,7 @@ extension GoggleDetailController: UITextFieldDelegate {
         return true
     }
     
-    func invalidEntryAnimation(for textField: UITextField) {
+    func animateInvalidEntry(in textField: UITextField) {
         let positionY = textField.layer.position.y
         let change: CGFloat = 2
         
@@ -208,5 +237,16 @@ extension GoggleDetailController: UITextFieldDelegate {
         shake.duration = shake.settlingDuration
         
         textField.layer.add(shake, forKey: nil)
+    }
+    
+    func displayInvalidQtyLabel(with text: String) {
+        UIView.animate(withDuration: 0, delay: 0, options: .curveLinear, animations: {
+            self.invalidQtyLabel.text = text
+            self.invalidQtyLabel.alpha = 1.0
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.25, delay: 2.0, options: .curveEaseIn, animations: {
+                self.invalidQtyLabel.alpha = 0.0
+            }, completion: nil)
+        })
     }
 }
