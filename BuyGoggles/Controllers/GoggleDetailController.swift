@@ -12,6 +12,9 @@ protocol GoggleDetailControllerDelegate {
 }
 
 class GoggleDetailController: UIViewController {
+    
+    // MARK: - Properties
+    
     let padding: CGFloat = 20
     var vendorNo: String!
     var image: UIImage!
@@ -21,9 +24,10 @@ class GoggleDetailController: UIViewController {
     var qtyOrdered: Int?
     
     var textField: UITextField!
-    
     var delegate: GoggleDetailControllerDelegate?
     
+    
+    // MARK: - Initialization
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,6 +92,7 @@ class GoggleDetailController: UIViewController {
         textField.isEnabled = hasStock() ? true : false
         textField.text = qtyOrdered != nil ? "\(qtyOrdered!)" : ""
         textField.becomeFirstResponder()
+        textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(textField)
         NSLayoutConstraint.activate([textField.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: padding * 2),
@@ -121,6 +126,9 @@ class GoggleDetailController: UIViewController {
                                      qtyLabel.heightAnchor.constraint(equalToConstant: 20)])
 
     }
+    
+    
+    // MARK: - Functions
 
     func hasStock() -> Bool {
         return qtyAvailable > 0
@@ -154,5 +162,51 @@ class GoggleDetailController: UIViewController {
         if tapLocation.isOutside(of: textField.bounds) {
             textField.endEditing(true)
         }
+    }
+}
+
+
+// MARK: - UITextFieldDelegate
+
+extension GoggleDetailController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        //Prevent leading zeroes
+        if textField.text?.count == 0 && string == "0" {
+            invalidEntryAnimation(for: textField)
+            return false
+        }
+        
+        //Prevent entry of >4 digits
+        if (textField.text! + string).count > String(K.maxQty).count {
+            invalidEntryAnimation(for: textField)
+            return false
+        }
+        
+        //Prevent copy/paste of non-digit text
+        let allowedCharacterSet = CharacterSet.init(charactersIn: "0123456789")
+        let textCharacterSet = CharacterSet.init(charactersIn: textField.text! + string)
+        if !allowedCharacterSet.isSuperset(of: textCharacterSet) {
+            invalidEntryAnimation(for: textField)
+            return false
+        }
+        
+        //Finally, if pass above criteria, then approved!
+        return true
+    }
+    
+    func invalidEntryAnimation(for textField: UITextField) {
+        let positionY = textField.layer.position.y
+        let change: CGFloat = 2
+        
+        let shake = CASpringAnimation(keyPath: "position.y")
+        shake.fromValue = positionY
+        shake.toValue = positionY + change
+        shake.initialVelocity = 50
+        shake.mass = 10
+        shake.stiffness = 50000
+        shake.damping = 100
+        shake.duration = shake.settlingDuration
+        
+        textField.layer.add(shake, forKey: nil)
     }
 }

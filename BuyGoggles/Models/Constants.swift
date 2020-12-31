@@ -17,7 +17,7 @@ struct K {
     static let columnQty = 7
 
     static let lowStock = 100
-    static let maxQty = 9999
+    static let maxQty = 999
 
     static var goggleData: [GoggleData] = []
     static var goggleBrands: [String] = []
