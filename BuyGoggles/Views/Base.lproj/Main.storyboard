@@ -19,9 +19,16 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="qN5-EH-xIE"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="qN5-EH-xIE">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="LkY-p6-DEO">
+                            <connections>
+                                <action selector="logoutPressed:" destination="BYZ-38-t0r" id="ZYU-NX-C6p"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="4Nk-fz-fzt" kind="presentation" identifier="showDetail" id="xpc-Jj-jE6"/>
+                        <segue destination="ZMf-me-Xo0" kind="presentation" identifier="LogoutSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="fEH-zc-ygN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -51,23 +58,106 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Clp-aM-fyI">
-                                <rect key="frame" x="178" y="427.5" width="58" height="41"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Login"/>
-                                <connections>
-                                    <action selector="loginPressed:" destination="ZMf-me-Xo0" eventType="touchUpInside" id="C6W-6D-LY4"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="VoR-2A-oh8">
+                                <rect key="frame" x="87" y="229" width="240" height="238"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Y3T-6a-q2Z">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="60"/>
+                                        <subviews>
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EcR-Qr-4kG">
+                                                <rect key="frame" x="0.0" y="0.0" width="240" height="60"/>
+                                                <subviews>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aEk-p7-3AI">
+                                                        <rect key="frame" x="20" y="19" width="200" height="22"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="8vC-PC-n7B"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <textInputTraits key="textInputTraits" textContentType="email"/>
+                                                    </textField>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="60" id="6x8-rP-Leg"/>
+                                                    <constraint firstItem="aEk-p7-3AI" firstAttribute="centerY" secondItem="EcR-Qr-4kG" secondAttribute="centerY" id="Oig-9d-PuT"/>
+                                                    <constraint firstItem="aEk-p7-3AI" firstAttribute="centerX" secondItem="EcR-Qr-4kG" secondAttribute="centerX" id="YeB-ud-E9K"/>
+                                                    <constraint firstAttribute="width" constant="240" id="eOG-MP-ZNO"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <integer key="value" value="30"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="TAX-WN-hCR">
+                                        <rect key="frame" x="0.0" y="80" width="240" height="60"/>
+                                        <subviews>
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="205-xw-y1M">
+                                                <rect key="frame" x="0.0" y="0.0" width="240" height="60"/>
+                                                <subviews>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="je7-cq-rIf">
+                                                        <rect key="frame" x="20" y="19.5" width="200" height="21"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="jb5-z1-sbE"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
+                                                    </textField>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="240" id="7EC-yO-H5B"/>
+                                                    <constraint firstItem="je7-cq-rIf" firstAttribute="centerY" secondItem="205-xw-y1M" secondAttribute="centerY" id="dbx-Cs-AJr"/>
+                                                    <constraint firstAttribute="height" constant="60" id="gLV-nF-Ubv"/>
+                                                    <constraint firstItem="je7-cq-rIf" firstAttribute="centerX" secondItem="205-xw-y1M" secondAttribute="centerX" id="nTM-s0-uef"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <integer key="value" value="30"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Clp-aM-fyI">
+                                        <rect key="frame" x="0.0" y="160" width="240" height="41"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                        <state key="normal" title="Login"/>
+                                        <connections>
+                                            <action selector="loginPressed:" destination="ZMf-me-Xo0" eventType="touchUpInside" id="C6W-6D-LY4"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Incorrect login info!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5i-Af-TC4">
+                                        <rect key="frame" x="0.0" y="221" width="240" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" systemColor="systemRedColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="N5i-Af-TC4" firstAttribute="leading" secondItem="VoR-2A-oh8" secondAttribute="leading" id="HAp-jM-58M"/>
+                                    <constraint firstAttribute="trailing" secondItem="N5i-Af-TC4" secondAttribute="trailing" id="gP1-oS-mS1"/>
+                                    <constraint firstItem="Clp-aM-fyI" firstAttribute="centerX" secondItem="VoR-2A-oh8" secondAttribute="centerX" id="zPu-Oa-QUg"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nFR-md-xKm"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Clp-aM-fyI" firstAttribute="centerY" secondItem="QuF-eb-UFX" secondAttribute="centerY" id="1ns-23-DH7"/>
-                            <constraint firstItem="Clp-aM-fyI" firstAttribute="centerX" secondItem="QuF-eb-UFX" secondAttribute="centerX" id="Kiq-Ao-BXa"/>
+                            <constraint firstItem="VoR-2A-oh8" firstAttribute="centerX" secondItem="QuF-eb-UFX" secondAttribute="centerX" id="HSg-sz-fIT"/>
+                            <constraint firstItem="VoR-2A-oh8" firstAttribute="centerY" secondItem="QuF-eb-UFX" secondAttribute="centerY" constant="-100" id="Ypb-DA-8Cv"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="emailField" destination="aEk-p7-3AI" id="W0p-fm-LO4"/>
+                        <outlet property="loginErrorLabel" destination="N5i-Af-TC4" id="Sps-Ir-yF5"/>
+                        <outlet property="passwordField" destination="je7-cq-rIf" id="YeH-SQ-D2g"/>
                         <segue destination="yhG-gH-dlz" kind="presentation" identifier="LoginSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="lxn-0z-LGl"/>
                     </connections>
                 </viewController>
@@ -160,6 +250,9 @@
         <image name="list.bullet" catalog="system" width="128" height="88"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

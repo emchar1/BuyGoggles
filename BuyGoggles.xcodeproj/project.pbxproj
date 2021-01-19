@@ -26,6 +26,7 @@
 		EA95266125968C6300808F42 /* SnowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA95266025968C6300808F42 /* SnowView.swift */; };
 		EA9FD858258F1866000E1CFB /* CreateCSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9FD857258F1866000E1CFB /* CreateCSV.swift */; };
 		EAAC4A6525B6AB3D00260CAF /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAAC4A6425B6AB3D00260CAF /* LoginController.swift */; };
+		EAAC4A6925B6B40F00260CAF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EAAC4A6825B6B40F00260CAF /* GoogleService-Info.plist */; };
 		EFF93304BBFE9FA2E5A7E526 /* Pods_BuyGoggles.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD37A9C447FD322DA7B50163 /* Pods_BuyGoggles.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		EA95266025968C6300808F42 /* SnowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowView.swift; sourceTree = "<group>"; };
 		EA9FD857258F1866000E1CFB /* CreateCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCSV.swift; sourceTree = "<group>"; };
 		EAAC4A6425B6AB3D00260CAF /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		EAAC4A6825B6B40F00260CAF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				EA46A0A92585F91E0076ECBB /* Assets.xcassets */,
 				EA46A0AB2585F91E0076ECBB /* LaunchScreen.storyboard */,
 				EA46A0AE2585F91E0076ECBB /* Info.plist */,
+				EAAC4A6825B6B40F00260CAF /* GoogleService-Info.plist */,
 			);
 			path = BuyGoggles;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 			files = (
 				EA46A0AD2585F91E0076ECBB /* LaunchScreen.storyboard in Resources */,
 				EA46A0AA2585F91E0076ECBB /* Assets.xcassets in Resources */,
+				EAAC4A6925B6B40F00260CAF /* GoogleService-Info.plist in Resources */,
 				EA46A0A82585F91D0076ECBB /* Main.storyboard in Resources */,
 				EA46A0EF258B3EAC0076ECBB /* TRInventory11-2020.csv in Resources */,
 			);

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class BuyGogglesController: UIViewController {
     
@@ -67,6 +68,24 @@ class BuyGogglesController: UIViewController {
         appearance.backgroundColor = .white
         navigationController?.navigationBar.standardAppearance = appearance
                 
+    }
+}
+
+
+// MARK: - Logout
+
+extension BuyGogglesController {
+    @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
+        do {
+            try Auth.auth().signOut()
+            
+            print("Sign out successful")
+            
+            self.performSegue(withIdentifier: "LogoutSegue", sender: nil)
+        }
+        catch let signoutError as NSError {
+            print("Error signing out: %@", signoutError)
+        }
     }
 }
 

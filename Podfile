@@ -8,5 +8,6 @@ target 'BuyGoggles' do
   # Pods for BuyGoggles
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
+  pod 'Firebase/Analytics'
 
 end

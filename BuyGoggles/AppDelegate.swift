@@ -6,12 +6,19 @@
 //
 
 import UIKit
+import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
         
+        //Creates Firebase firestore and checks that you can access it. That's it.
+        let db = Firestore.firestore()
+        print(db)
+        
+        //Get the google data from a csv file in the app. Need to change this to JSON maybe???
         getGoggleData(filename: "TRInventory11-2020", ext: "csv")
         
         return true
