@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yhG-gH-dlz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ZMf-me-Xo0">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -43,11 +43,44 @@
             </objects>
             <point key="canvasLocation" x="2726.0869565217395" y="-7.3660714285714279"/>
         </scene>
+        <!--Login Controller-->
+        <scene sceneID="KkZ-2y-wVh">
+            <objects>
+                <viewController id="ZMf-me-Xo0" customClass="LoginController" customModule="BuyGoggles" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QuF-eb-UFX">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Clp-aM-fyI">
+                                <rect key="frame" x="178" y="427.5" width="58" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Login"/>
+                                <connections>
+                                    <action selector="loginPressed:" destination="ZMf-me-Xo0" eventType="touchUpInside" id="C6W-6D-LY4"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="nFR-md-xKm"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Clp-aM-fyI" firstAttribute="centerY" secondItem="QuF-eb-UFX" secondAttribute="centerY" id="1ns-23-DH7"/>
+                            <constraint firstItem="Clp-aM-fyI" firstAttribute="centerX" secondItem="QuF-eb-UFX" secondAttribute="centerX" id="Kiq-Ao-BXa"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <segue destination="yhG-gH-dlz" kind="presentation" identifier="LoginSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="lxn-0z-LGl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pmq-CJ-zaA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1006" y="357"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="c6p-AP-rDN">
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="yhG-gH-dlz" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="UiC-Zw-lNp"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="MxZ-ih-4f2">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -25,9 +25,14 @@
 		EA95265A25949CD800808F42 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA95265925949CD800808F42 /* TitleCell.swift */; };
 		EA95266125968C6300808F42 /* SnowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA95266025968C6300808F42 /* SnowView.swift */; };
 		EA9FD858258F1866000E1CFB /* CreateCSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9FD857258F1866000E1CFB /* CreateCSV.swift */; };
+		EAAC4A6525B6AB3D00260CAF /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAAC4A6425B6AB3D00260CAF /* LoginController.swift */; };
+		EFF93304BBFE9FA2E5A7E526 /* Pods_BuyGoggles.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD37A9C447FD322DA7B50163 /* Pods_BuyGoggles.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		15952DC030BE2D2441A4F620 /* Pods-BuyGoggles.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuyGoggles.release.xcconfig"; path = "Target Support Files/Pods-BuyGoggles/Pods-BuyGoggles.release.xcconfig"; sourceTree = "<group>"; };
+		AD37A9C447FD322DA7B50163 /* Pods_BuyGoggles.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuyGoggles.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E35EB6B717C7F115E06617CB /* Pods-BuyGoggles.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuyGoggles.debug.xcconfig"; path = "Target Support Files/Pods-BuyGoggles/Pods-BuyGoggles.debug.xcconfig"; sourceTree = "<group>"; };
 		EA46A09D2585F91D0076ECBB /* BuyGoggles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuyGoggles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA46A0A02585F91D0076ECBB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EA46A0A22585F91D0076ECBB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +53,7 @@
 		EA95265925949CD800808F42 /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 		EA95266025968C6300808F42 /* SnowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnowView.swift; sourceTree = "<group>"; };
 		EA9FD857258F1866000E1CFB /* CreateCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCSV.swift; sourceTree = "<group>"; };
+		EAAC4A6425B6AB3D00260CAF /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,17 +61,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFF93304BBFE9FA2E5A7E526 /* Pods_BuyGoggles.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		40A4B3CE9FB93B8EDC9C0753 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E35EB6B717C7F115E06617CB /* Pods-BuyGoggles.debug.xcconfig */,
+				15952DC030BE2D2441A4F620 /* Pods-BuyGoggles.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		DD2EF68E140D781ADA5866EB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AD37A9C447FD322DA7B50163 /* Pods_BuyGoggles.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EA46A0942585F91D0076ECBB = {
 			isa = PBXGroup;
 			children = (
 				EA46A09F2585F91D0076ECBB /* BuyGoggles */,
 				EA46A09E2585F91D0076ECBB /* Products */,
+				40A4B3CE9FB93B8EDC9C0753 /* Pods */,
+				DD2EF68E140D781ADA5866EB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +121,7 @@
 		EA46A0B82585FA220076ECBB /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EAAC4A6425B6AB3D00260CAF /* LoginController.swift */,
 				EA46A0A42585F91D0076ECBB /* BuyGogglesController.swift */,
 				EA46A0E82589DDA70076ECBB /* GoggleDetailController.swift */,
 				EA46A0FA258C96820076ECBB /* CheckoutController.swift */,
@@ -134,9 +161,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EA46A0B12585F91E0076ECBB /* Build configuration list for PBXNativeTarget "BuyGoggles" */;
 			buildPhases = (
+				C72923EB3E5ABB09AF77EA96 /* [CP] Check Pods Manifest.lock */,
 				EA46A0992585F91D0076ECBB /* Sources */,
 				EA46A09A2585F91D0076ECBB /* Frameworks */,
 				EA46A09B2585F91D0076ECBB /* Resources */,
+				571705ED396FF8408E326A8D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -193,6 +222,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		571705ED396FF8408E326A8D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BuyGoggles/Pods-BuyGoggles-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BuyGoggles/Pods-BuyGoggles-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BuyGoggles/Pods-BuyGoggles-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C72923EB3E5ABB09AF77EA96 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BuyGoggles-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		EA46A0992585F91D0076ECBB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -202,6 +273,7 @@
 				EA46A0E02588AB690076ECBB /* FooterView.swift in Sources */,
 				EA46A0DD2588A5B40076ECBB /* HeaderView.swift in Sources */,
 				EA95265A25949CD800808F42 /* TitleCell.swift in Sources */,
+				EAAC4A6525B6AB3D00260CAF /* LoginController.swift in Sources */,
 				EA46A0A12585F91D0076ECBB /* AppDelegate.swift in Sources */,
 				EA46A0C225861DF70076ECBB /* CollectionCell.swift in Sources */,
 				EA46A0FB258C96820076ECBB /* CheckoutController.swift in Sources */,
@@ -355,6 +427,7 @@
 		};
 		EA46A0B22585F91E0076ECBB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E35EB6B717C7F115E06617CB /* Pods-BuyGoggles.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -376,6 +449,7 @@
 		};
 		EA46A0B32585F91E0076ECBB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15952DC030BE2D2441A4F620 /* Pods-BuyGoggles.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

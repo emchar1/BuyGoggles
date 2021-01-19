@@ -59,7 +59,7 @@ class CheckoutController: UIViewController {
         return button
     }()
     
-    var snowView: SnowView!
+//    var snowView: SnowView!
 
 
     // MARK: - Initialization
@@ -67,7 +67,7 @@ class CheckoutController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .gray
+        view.backgroundColor = .white
         
         scrollView = UIScrollView(frame: CGRect(x: 0,
                                                 y: 0,
@@ -124,16 +124,16 @@ class CheckoutController: UIViewController {
         navigationController?.navigationBar.isTranslucent = false
         
         //add the snow effect layer
-        snowView = SnowView(frame: CGRect(x: -150, y: -100, width: 300, height: 50))
-        let snowClipView = UIView(frame: view.frame.offsetBy(dx: 0, dy: 0))
-        snowClipView.clipsToBounds = true
-        snowClipView.addSubview(snowView)
-        scrollView.addSubview(snowClipView)
-        
-        UIView.animate(withDuration: 0.5, delay: 3.0, options: .curveLinear, animations: {
-            self.view.backgroundColor = .white
-            self.snowView.alpha = 0
-        }, completion: nil)
+//        snowView = SnowView(frame: CGRect(x: -150, y: -100, width: 300, height: 50))
+//        let snowClipView = UIView(frame: view.frame.offsetBy(dx: 0, dy: 0))
+//        snowClipView.clipsToBounds = true
+//        snowClipView.addSubview(snowView)
+//        scrollView.addSubview(snowClipView)
+//
+//        UIView.animate(withDuration: 0.5, delay: 3.0, options: .curveLinear, animations: {
+//            self.view.backgroundColor = .white
+//            self.snowView.alpha = 0
+//        }, completion: nil)
     }
 
     //Need to reload the tableView in a separate method!!
