@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseDatabase
+import FirebaseUI
 
 protocol GoggleDetailControllerDelegate {
     func goggleDetailController(_ controller: GoggleDetailController, didUpdateQty qtyOrdered: Int, forVendorNo vendorNo: String)
@@ -17,7 +19,7 @@ class GoggleDetailController: UIViewController {
     
     let padding: CGFloat = 20
     var vendorNo: String!
-    var image: UIImage!
+    var refImage: StorageReference!
     var brand: String!
     var itemDescription: String!
     var qtyAvailable: Int = 0
@@ -26,6 +28,8 @@ class GoggleDetailController: UIViewController {
     var textField: UITextField!
     var invalidQtyLabel: UILabel!
     var delegate: GoggleDetailControllerDelegate?
+    
+    var ref: DatabaseReference!
     
     
     // MARK: - Initialization
@@ -56,7 +60,7 @@ class GoggleDetailController: UIViewController {
                                      brandLabel.heightAnchor.constraint(equalToConstant: 60)])
 
         let imageView = UIImageView()
-        imageView.image = image
+        imageView.sd_setImage(with: refImage)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false

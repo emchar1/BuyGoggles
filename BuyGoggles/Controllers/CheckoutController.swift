@@ -208,7 +208,7 @@ extension CheckoutController: UITableViewDelegate, UITableViewDataSource {
         let sharedFont = UIFont(name: "Avenir Next Condensed Regular", size: 14)
         let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as! TableViewCell
 
-        cell.skuLabel.text = gogglesForBrand[indexPath.row].sku
+        cell.skuLabel.text = "\(gogglesForBrand[indexPath.row].sku)"
         cell.itemDescLabel.font = sharedFont
         cell.itemDescLabel.text = gogglesForBrand[indexPath.row].description
 
@@ -272,7 +272,7 @@ extension CheckoutController: MFMailComposeViewControllerDelegate {
         
         for item in K.shoppingCart {
             let totalCost: Float = Float(item.qtyOrdered!) * item.unitPrice
-            let csvItem: [String] = [item.brand, item.vendorNo, item.sku, item.description, String(item.qtyOrdered!), String(item.unitPrice), String(totalCost)]
+            let csvItem: [String] = [item.brand, item.vendorNo, "\(item.sku)", item.description, String(item.qtyOrdered!), String(item.unitPrice), String(totalCost)]
             
             csvItems.append(csvItem)
         }

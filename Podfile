@@ -6,8 +6,10 @@ target 'BuyGoggles' do
   use_frameworks!
 
   # Pods for BuyGoggles
-  pod 'Firebase/Auth'
-  pod 'Firebase/Firestore'
-  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'       #Authentication
+  pod 'Firebase/Firestore'  #Firestore
+  pod 'Firebase/Database'   #Realtime Database
+  pod 'FirebaseUI/Storage'  #Cloud Storage
+  pod 'Firebase/Analytics'  #Analytics
 
 end

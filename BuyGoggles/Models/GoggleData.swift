@@ -6,17 +6,19 @@
 //
 
 import UIKit
+import FirebaseStorage
 
 struct GoggleData: Comparable {
-    var brand: String
     var vendorNo: String
-    var sku: String
+    var sku: Int64
+    var category: String
+    var brand: String
     var description: String
-    var image: UIImage
     var unitPrice: Float
     var qty: Int
     var qtyOrdered: Int?
-    
+    var image: StorageReference
+
     static func < (lhs: GoggleData, rhs: GoggleData) -> Bool {
         //First sort
         if lhs.brand != rhs.brand {

@@ -18,7 +18,7 @@ struct K {
 
     static let lowStock = 100
     static let maxQty = 999
-
+    
     static var goggleData: [GoggleData] = []
     static var goggleBrands: [String] = []
     static var shoppingCart: [GoggleData] {
@@ -36,6 +36,7 @@ struct K {
         return brands
     }
 }
+
 
 extension CGPoint {
     func isOutside(of rect: CGRect) -> Bool {

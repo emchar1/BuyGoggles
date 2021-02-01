@@ -18,8 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let db = Firestore.firestore()
         print(db)
         
+        //OLD WAY
         //Get the google data from a csv file in the app. Need to change this to JSON maybe???
-        getGoggleData(filename: "TRInventory11-2020", ext: "csv")
+//        getGoggleData(filename: "TRInventory11-2020", ext: "csv")
         
         return true
     }
@@ -41,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 }
 
-
+/*
 extension AppDelegate {
     
     /**
@@ -99,3 +100,4 @@ extension AppDelegate {
         K.goggleBrands.sort { $0 < $1 }
     }
 }
+*/

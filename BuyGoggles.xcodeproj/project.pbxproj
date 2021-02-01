@@ -19,7 +19,6 @@
 		EA46A0E02588AB690076ECBB /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0DF2588AB690076ECBB /* FooterView.swift */; };
 		EA46A0E62589BD230076ECBB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0E52589BD230076ECBB /* Constants.swift */; };
 		EA46A0E92589DDA70076ECBB /* GoggleDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0E82589DDA70076ECBB /* GoggleDetailController.swift */; };
-		EA46A0EF258B3EAC0076ECBB /* TRInventory11-2020.csv in Resources */ = {isa = PBXBuildFile; fileRef = EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */; };
 		EA46A0FB258C96820076ECBB /* CheckoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0FA258C96820076ECBB /* CheckoutController.swift */; };
 		EA46A103258DEDB30076ECBB /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A102258DEDB30076ECBB /* TableViewCell.swift */; };
 		EA95265A25949CD800808F42 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA95265925949CD800808F42 /* TitleCell.swift */; };
@@ -48,7 +47,6 @@
 		EA46A0DF2588AB690076ECBB /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		EA46A0E52589BD230076ECBB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EA46A0E82589DDA70076ECBB /* GoggleDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoggleDetailController.swift; sourceTree = "<group>"; };
-		EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "TRInventory11-2020.csv"; sourceTree = "<group>"; };
 		EA46A0FA258C96820076ECBB /* CheckoutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutController.swift; sourceTree = "<group>"; };
 		EA46A102258DEDB30076ECBB /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		EA95265925949CD800808F42 /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
@@ -56,6 +54,7 @@
 		EA9FD857258F1866000E1CFB /* CreateCSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCSV.swift; sourceTree = "<group>"; };
 		EAAC4A6425B6AB3D00260CAF /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		EAAC4A6825B6B40F00260CAF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EAE48F3925C32D9800709098 /* BuyGoggles.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BuyGoggles.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +107,7 @@
 		EA46A09F2585F91D0076ECBB /* BuyGoggles */ = {
 			isa = PBXGroup;
 			children = (
+				EAE48F3925C32D9800709098 /* BuyGoggles.entitlements */,
 				EA46A0A02585F91D0076ECBB /* AppDelegate.swift */,
 				EA46A0A22585F91D0076ECBB /* SceneDelegate.swift */,
 				EA46A0BB2585FA370076ECBB /* Models */,
@@ -148,7 +148,6 @@
 		EA46A0BB2585FA370076ECBB /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				EA46A0EE258B3EAC0076ECBB /* TRInventory11-2020.csv */,
 				EA46A0BE2586046B0076ECBB /* GoggleData.swift */,
 				EA46A0E52589BD230076ECBB /* Constants.swift */,
 				EA9FD857258F1866000E1CFB /* CreateCSV.swift */,
@@ -220,7 +219,6 @@
 				EA46A0AA2585F91E0076ECBB /* Assets.xcassets in Resources */,
 				EAAC4A6925B6B40F00260CAF /* GoogleService-Info.plist in Resources */,
 				EA46A0A82585F91D0076ECBB /* Main.storyboard in Resources */,
-				EA46A0EF258B3EAC0076ECBB /* TRInventory11-2020.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,15 +433,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BuyGoggles/BuyGoggles.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = LZ8V996BTJ;
 				INFOPLIST_FILE = BuyGoggles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.5play-apps.BuyGoggles2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -457,15 +456,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BuyGoggles/BuyGoggles.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = LZ8V996BTJ;
 				INFOPLIST_FILE = BuyGoggles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.5play-apps.BuyGoggles2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

@@ -7,11 +7,13 @@
 
 import UIKit
 import Firebase
+import FirebaseUI
 
 class BuyGogglesController: UIViewController {
     
     // MARK: - Properties
     var orderIndexPath: IndexPath?
+    var ref: DatabaseReference!
     
     lazy var titleSize: (width: CGFloat, height: CGFloat) = {
         let insetPadding: CGFloat = 8
@@ -27,13 +29,17 @@ class BuyGogglesController: UIViewController {
                                            left: CollectionCell.padding,
                                            bottom: CollectionCell.padding,
                                            right: CollectionCell.padding)
-        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: CollectionCell.identifier)
         collectionView.register(TitleCell.self, forCellWithReuseIdentifier: TitleCell.identifier)
-        collectionView.register(HeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderView.reuseIdentifier)
-        collectionView.register(FooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: FooterView.reuseIdentifier)
+        collectionView.register(HeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: HeaderView.reuseIdentifier)
+        collectionView.register(FooterView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: FooterView.reuseIdentifier)
         return collectionView
     }()
     
@@ -45,7 +51,6 @@ class BuyGogglesController: UIViewController {
         
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .white
         
         view.addSubview(collectionView)
         
@@ -54,6 +59,7 @@ class BuyGogglesController: UIViewController {
                                      view.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
                                      view.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)])
 
+        //What is this mish mosh mess?
         let logoImageView = UIImageView()
         logoImageView.image = UIImage(named: "logo.svg")?.withRenderingMode(.alwaysTemplate)
         logoImageView.tintColor = .black
@@ -67,8 +73,42 @@ class BuyGogglesController: UIViewController {
         appearance.shadowColor = .lightGray
         appearance.backgroundColor = .white
         navigationController?.navigationBar.standardAppearance = appearance
+     
+        
+        //Firebase DB
+        ref = Database.database().reference().child("Items")
+        let query = ref.queryOrdered(byChild: "category").queryEqual(toValue: "GOGGLES")
+        
+        query.observe(DataEventType.value) { (snapshot) in
+            if snapshot.childrenCount > 0 {
+                K.goggleData.removeAll()
                 
-    }
+                for itemSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
+                    if let obj = itemSnapshot.value as? [String: AnyObject] {
+                        let item = GoggleData(vendorNo: obj["vendorPartNo"] as! String,
+                                              sku: obj["TRSku"] as! Int64,
+                                              category: obj["category"] as! String,
+                                              brand: obj["model"] as! String,
+                                              description: obj["description"] as! String,
+                                              unitPrice: obj["unitPrice"] as? Float ?? 0,
+                                              qty: obj["TRQty"] as? Int ?? 0,
+                                              qtyOrdered: nil,
+                                              image: Storage.storage().reference().child((obj["vendorPartNo"] as! String) + ".png"))
+                        K.goggleData.append(item)
+                        
+                        //Populate the unique goggleBrands
+                        if !K.goggleBrands.contains(item.brand) {
+                            K.goggleBrands.append(item.brand)
+                        }
+                        
+                        self.collectionView.reloadData()
+                    }
+                }
+            }
+        } //end query.observe...
+    } //end viewDidLoad
+    
+    
 }
 
 
@@ -118,7 +158,7 @@ extension BuyGogglesController: UICollectionViewDataSource {
         }
         
         let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[section - 1] }
-        
+
         return goggleForBrand.count
     }
     
@@ -134,9 +174,14 @@ extension BuyGogglesController: UICollectionViewDataSource {
         
         cell.backgroundColor = .white
         
+        
+        
+        
+        //USE REALTIME DATABASE HERE...
         let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section - 1] }
-        cell.imageView.image = goggleForBrand[indexPath.row].image
-        cell.skuLabel.text = goggleForBrand[indexPath.row].sku + " - " + goggleForBrand[indexPath.row].description + "\n" + (goggleForBrand[indexPath.row].qtyOrdered != nil ? "Ordered: \(goggleForBrand[indexPath.row].qtyOrdered!)" : "")
+
+        cell.imageView.sd_setImage(with: Storage.storage().reference().child(goggleForBrand[indexPath.row].vendorNo + ".png"))
+        cell.skuLabel.text = "\(goggleForBrand[indexPath.row].sku)" + " - " + goggleForBrand[indexPath.row].description + "\n" + (goggleForBrand[indexPath.row].qtyOrdered != nil ? "Ordered: \(goggleForBrand[indexPath.row].qtyOrdered!)" : "")
         
         if goggleForBrand[indexPath.row].qtyOrdered != nil {
             cell.layer.borderWidth = 3
@@ -148,6 +193,17 @@ extension BuyGogglesController: UICollectionViewDataSource {
             cell.layer.borderWidth = 0
             cell.clipsToBounds = false
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         return cell
     }
@@ -187,10 +243,13 @@ extension BuyGogglesController: UICollectionViewDelegate {
                 
                 controller.vendorNo = goggleForBrand[indexPath.row].vendorNo
                 controller.brand = goggleForBrand[indexPath.row].brand
-                controller.image = goggleForBrand[indexPath.row].image
-                controller.itemDescription = goggleForBrand[indexPath.row].sku + " - " + goggleForBrand[indexPath.row].description
+                controller.refImage = goggleForBrand[indexPath.row].image
+                controller.itemDescription = "\(goggleForBrand[indexPath.row].sku)" + " - " + goggleForBrand[indexPath.row].description
                 controller.qtyAvailable = goggleForBrand[indexPath.row].qty
                 controller.qtyOrdered = goggleForBrand[indexPath.row].qtyOrdered
+
+                //Firebase DB
+                controller.ref = ref
                 
                 //Not sure about theses.....
                 controller.delegate = self

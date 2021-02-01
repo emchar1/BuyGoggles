@@ -109,6 +109,13 @@
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                                                     </textField>
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fK1-kl-j16">
+                                                        <rect key="frame" x="204" y="21" width="28" height="18"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <state key="normal" image="eye" catalog="system"/>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -158,12 +165,13 @@
                         <outlet property="emailField" destination="aEk-p7-3AI" id="W0p-fm-LO4"/>
                         <outlet property="loginErrorLabel" destination="N5i-Af-TC4" id="Sps-Ir-yF5"/>
                         <outlet property="passwordField" destination="je7-cq-rIf" id="YeH-SQ-D2g"/>
+                        <outlet property="peekPasswordButton" destination="fK1-kl-j16" id="lgt-nW-zMM"/>
                         <segue destination="yhG-gH-dlz" kind="presentation" identifier="LoginSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="lxn-0z-LGl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pmq-CJ-zaA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1006" y="357"/>
+            <point key="canvasLocation" x="-1007.2463768115942" y="356.91964285714283"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="c6p-AP-rDN">
@@ -247,6 +255,7 @@
     </scenes>
     <resources>
         <image name="cart" catalog="system" width="128" height="102"/>
+        <image name="eye" catalog="system" width="128" height="81"/>
         <image name="list.bullet" catalog="system" width="128" height="88"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
