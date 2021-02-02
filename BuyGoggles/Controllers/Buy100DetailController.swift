@@ -1,19 +1,19 @@
 //
-//  GoggleDetailController.swift
+//  Buy100DetailController.swift
 //  BuyGoggles
 //
 //  Created by Eddie Char on 12/15/20.
 //
 
 import UIKit
-import FirebaseDatabase
+//import FirebaseDatabase
 import FirebaseUI
 
-protocol GoggleDetailControllerDelegate {
-    func goggleDetailController(_ controller: GoggleDetailController, didUpdateQty qtyOrdered: Int, forVendorNo vendorNo: String)
+protocol Buy100DetailControllerDelegate {
+    func buy100DetailController(_ controller: Buy100DetailController, didUpdateQty qtyOrdered: Int, forVendorNo vendorNo: String)
 }
 
-class GoggleDetailController: UIViewController {
+class Buy100DetailController: UIViewController {
     
     // MARK: - Properties
     
@@ -27,10 +27,10 @@ class GoggleDetailController: UIViewController {
     
     var textField: UITextField!
     var invalidQtyLabel: UILabel!
-    var delegate: GoggleDetailControllerDelegate?
+    var delegate: Buy100DetailControllerDelegate?
     
-    var ref: DatabaseReference!
-    var item: GoggleData!
+//    var ref: DatabaseReference!
+    var item: ItemModel!
     
     
     // MARK: - Initialization
@@ -44,8 +44,8 @@ class GoggleDetailController: UIViewController {
         vendorNo = item.vendorNo
         refImage = item.image
         brand = item.brand
-        itemDescription = "\(item.sku)" + " - " + item.description
-        qtyAvailable = item.qty
+        itemDescription = "\(item.TRSku)" + " - " + item.description
+        qtyAvailable = item.TRQty
         qtyOrdered = item.qtyOrdered
         
         setupViews()
@@ -174,19 +174,21 @@ class GoggleDetailController: UIViewController {
             
         }
         else {
-            //Now update the DB ref
-            let itemRef: [String: Any] = ["TRQty": item.qty,
-                                          "TRSku": item.sku,
-                                          "category": item.category,
-                                          "description": item.description,
-                                          "imageName": item.vendorNo,
-                                          "model": item.brand,
-                                          "unitPrice": item.unitPrice,
-                                          "vendorPartNo": item.vendorNo,
-                                          "qtyOrdered": Int(textField.text!) ?? 0]
-            ref.setValue(itemRef)
+//            //Now update the DB ref - NO! HORRIBLE IDEA
+//            let itemRef: [String: Any] = ["TRQty": item.TRQty,
+//                                          "TRSku": item.TRSku,
+//                                          "PUQty": item.PUQty,
+//                                          "PUSku": item.PUSku,
+//                                          "category": item.category,
+//                                          "description": item.description,
+//                                          "imageName": item.vendorNo,
+//                                          "model": item.brand,
+//                                          "unitPrice": item.unitPrice,
+//                                          "vendorPartNo": item.vendorNo,
+//                                          "qtyOrdered": Int(textField.text!) ?? 0]
+//            ref.setValue(itemRef)
             
-            delegate?.goggleDetailController(self,
+            delegate?.buy100DetailController(self,
                                              didUpdateQty: Int(textField.text!) ?? 0,
                                              forVendorNo: self.vendorNo)
             print("qtyOrdered: \(Int(textField.text!) ?? 0)")
@@ -206,7 +208,7 @@ class GoggleDetailController: UIViewController {
 
 // MARK: - UITextFieldDelegate
 
-extension GoggleDetailController: UITextFieldDelegate {
+extension Buy100DetailController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let currentText = textField.text else {
             return true

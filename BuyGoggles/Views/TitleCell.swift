@@ -17,10 +17,10 @@ class TitleCell: UICollectionViewCell {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
         addSubview(view)
         
-        let goggleImageView = UIImageView(frame: view.frame)
-        goggleImageView.image = UIImage(named: "goggles.png")
-        goggleImageView.alpha = 0.5
-        view.addSubview(goggleImageView)
+        let itemImageView = UIImageView(frame: view.frame)
+        itemImageView.image = UIImage(named: "goggles.png")
+        itemImageView.alpha = 0.5
+        view.addSubview(itemImageView)
         
         let titleLabel = UILabel()
         titleLabel.text = "100PRCNT®\nTUCKER POWERSPORTS\nMX COLLECTION\nGOGGLES"

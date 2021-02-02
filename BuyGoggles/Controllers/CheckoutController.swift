@@ -7,6 +7,8 @@
 
 import UIKit
 import MessageUI
+import FirebaseDatabase
+import FirebaseUI
 
 class CheckoutController: UIViewController {
     
@@ -15,6 +17,7 @@ class CheckoutController: UIViewController {
     let cellHeight: CGFloat = 30
     let padding: CGFloat = 8
     let tvPadding: CGFloat = 40
+    
     var scrollHeight: CGFloat {
         guard let tableView = tableView else {
             return 0
@@ -169,9 +172,9 @@ extension CheckoutController: UITableViewDelegate, UITableViewDataSource {
             return 1
         }
         
-        let gogglesForBrand = K.shoppingCart.filter { $0.brand == K.orderedBrands[section] }
+        let itemForBrand = K.shoppingCart.filter { $0.brand == K.orderedBrands[section] }
         
-        return gogglesForBrand.count
+        return itemForBrand.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -204,21 +207,21 @@ extension CheckoutController: UITableViewDelegate, UITableViewDataSource {
             return cell
         }
         
-        let gogglesForBrand = K.shoppingCart.filter { $0.brand == K.orderedBrands[indexPath.section] }
+        let itemForBrand = K.shoppingCart.filter { $0.brand == K.orderedBrands[indexPath.section] }
         let sharedFont = UIFont(name: "Avenir Next Condensed Regular", size: 14)
         let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as! TableViewCell
 
-        cell.skuLabel.text = "\(gogglesForBrand[indexPath.row].sku)"
+        cell.skuLabel.text = "\(itemForBrand[indexPath.row].TRSku)"
         cell.itemDescLabel.font = sharedFont
-        cell.itemDescLabel.text = gogglesForBrand[indexPath.row].description
+        cell.itemDescLabel.text = itemForBrand[indexPath.row].description
 
         formatter.numberStyle = .decimal
         cell.qtyLabel.font = sharedFont
-        cell.qtyLabel.text = formatter.string(from: NSNumber(value: gogglesForBrand[indexPath.row].qtyOrdered!))
+        cell.qtyLabel.text = formatter.string(from: NSNumber(value: itemForBrand[indexPath.row].qtyOrdered!))
 
         formatter.numberStyle = .currency
         cell.totalCost.font = sharedFont
-        cell.totalCost.text = formatter.string(from: NSNumber(value: Float(gogglesForBrand[indexPath.row].qtyOrdered!) * gogglesForBrand[indexPath.row].unitPrice))
+        cell.totalCost.text = formatter.string(from: NSNumber(value: Float(itemForBrand[indexPath.row].qtyOrdered!) * itemForBrand[indexPath.row].unitPrice))
 
         return cell
     }
@@ -272,9 +275,25 @@ extension CheckoutController: MFMailComposeViewControllerDelegate {
         
         for item in K.shoppingCart {
             let totalCost: Float = Float(item.qtyOrdered!) * item.unitPrice
-            let csvItem: [String] = [item.brand, item.vendorNo, "\(item.sku)", item.description, String(item.qtyOrdered!), String(item.unitPrice), String(totalCost)]
+            let csvItem: [String] = [item.brand, item.vendorNo, "\(item.TRSku)", item.description, String(item.qtyOrdered!), String(item.unitPrice), String(totalCost)]
             
             csvItems.append(csvItem)
+            
+            //Now update the DB ref
+            let itemRef: [String: Any] = ["TRQty": item.TRQty,
+                                          "TRSku": item.TRSku,
+                                          "PUQty": item.PUQty,
+                                          "PUSku": item.PUSku,
+                                          "category": item.category,
+                                          "description": item.description,
+                                          "imageName": item.vendorNo,
+                                          "model": item.brand,
+                                          "unitPrice": item.unitPrice,
+                                          "vendorPartNo": item.vendorNo,
+                                          "qtyOrdered": item.qtyOrdered ?? 0]
+            let ref = Database.database().reference().child("Items").child(item.vendorNo)
+            ref.setValue(itemRef)
+                        
         }
         
         mailOrder(for: CreateCSV.commaSeparatedValueDataForLines(lines: csvItems))
@@ -295,9 +314,9 @@ extension CheckoutController: MFMailComposeViewControllerDelegate {
 
         mail.mailComposeDelegate = self
         mail.setToRecipients(["grady@100percent.com"])
-        mail.setSubject("TR Goggle Order #\(orderNo) - \(formatter.string(from: date))")
+        mail.setSubject("Order #\(orderNo) - \(formatter.string(from: date))")
         mail.setMessageBody("Make it rain.", isHTML: true)
-        mail.addAttachmentData(data, mimeType: "text/csv", fileName: "TRGoggle\(orderNo).csv")
+        mail.addAttachmentData(data, mimeType: "text/csv", fileName: "Items\(orderNo).csv")
         
         present(mail, animated: true)
     }

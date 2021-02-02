@@ -8,21 +8,21 @@
 import UIKit
 
 struct K {
-    static let columnVendorNo = 1
-    static let columnSKU = 2
-    static let columnCategory = 3
-    static let columnBrand = 4
-    static let columnDescription = 5
-    static let columnUnitPrice = 6
-    static let columnQty = 7
+//    static let columnVendorNo = 1
+//    static let columnSKU = 2
+//    static let columnCategory = 3
+//    static let columnBrand = 4
+//    static let columnDescription = 5
+//    static let columnUnitPrice = 6
+//    static let columnQty = 7
 
     static let lowStock = 100
     static let maxQty = 999
     
-    static var goggleData: [GoggleData] = []
-    static var goggleBrands: [String] = []
-    static var shoppingCart: [GoggleData] {
-        return goggleData.filter { ($0.qtyOrdered != nil && $0.qtyOrdered! > 0) }
+    static var items: [ItemModel] = []
+    static var brands: [String] = []
+    static var shoppingCart: [ItemModel] {
+        return items.filter { ($0.qtyOrdered != nil && $0.qtyOrdered! > 0) }
     }
     static var orderedBrands: [String] {
         var brands: [String] = []

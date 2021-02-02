@@ -1,5 +1,5 @@
 //
-//  BuyGogglesController.swift
+//  Buy100Controller.swift
 //  BuyGoggles
 //
 //  Created by Eddie Char on 12/12/20.
@@ -9,11 +9,11 @@ import UIKit
 import Firebase
 import FirebaseUI
 
-class BuyGogglesController: UIViewController {
+class Buy100Controller: UIViewController {
     
     // MARK: - Properties
-    var orderIndexPath: IndexPath?
     var ref: DatabaseReference!
+    var orderIndexPath: IndexPath?
     
     lazy var titleSize: (width: CGFloat, height: CGFloat) = {
         let insetPadding: CGFloat = 8
@@ -81,24 +81,26 @@ class BuyGogglesController: UIViewController {
         
         query.observe(DataEventType.value) { (snapshot) in
             if snapshot.childrenCount > 0 {
-                K.goggleData.removeAll()
+                K.items.removeAll()
                 
                 for itemSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
                     if let obj = itemSnapshot.value as? [String: AnyObject] {
-                        let item = GoggleData(vendorNo: obj["vendorPartNo"] as! String,
-                                              sku: obj["TRSku"] as! Int64,
+                        let item = ItemModel(vendorNo: obj["vendorPartNo"] as! String,
+                                              TRSku: obj["TRSku"] as! Int64,
+                                              PUSku: obj["PUSku"] as! Int64,
                                               category: obj["category"] as! String,
                                               brand: obj["model"] as! String,
                                               description: obj["description"] as! String,
                                               unitPrice: obj["unitPrice"] as? Float ?? 0,
-                                              qty: obj["TRQty"] as? Int ?? 0,
+                                              TRQty: obj["TRQty"] as? Int ?? 0,
+                                              PUQty: obj["PUQty"] as? Int ?? 0,
                                               qtyOrdered: obj["qtyOrdered"] as? Int,
                                               image: Storage.storage().reference().child((obj["vendorPartNo"] as! String) + ".png"))
-                        K.goggleData.append(item)
+                        K.items.append(item)
                         
-                        //Populate the unique goggleBrands
-                        if !K.goggleBrands.contains(item.brand) {
-                            K.goggleBrands.append(item.brand)
+                        //Populate the unique item brands
+                        if !K.brands.contains(item.brand) {
+                            K.brands.append(item.brand)
                         }
                         
                         self.collectionView.reloadData()
@@ -106,6 +108,13 @@ class BuyGogglesController: UIViewController {
                 }
             }
         } //end query.observe...
+        
+        
+        //Check authentication
+        let user = Auth.auth().currentUser
+        if let user = user {
+            print("USER: \(user.uid), \(user.email ?? "No email")")
+        }
     } //end viewDidLoad
     
     
@@ -114,7 +123,7 @@ class BuyGogglesController: UIViewController {
 
 // MARK: - Logout
 
-extension BuyGogglesController {
+extension Buy100Controller {
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {
             try Auth.auth().signOut()
@@ -132,7 +141,7 @@ extension BuyGogglesController {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension BuyGogglesController: UICollectionViewDelegateFlowLayout {
+extension Buy100Controller: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         guard indexPath.section > 0 else {
@@ -146,10 +155,10 @@ extension BuyGogglesController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - UICollectionViewDataSource
 
-extension BuyGogglesController: UICollectionViewDataSource {
+extension Buy100Controller: UICollectionViewDataSource {
         
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return K.goggleBrands.count + 1
+        return K.brands.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -157,9 +166,9 @@ extension BuyGogglesController: UICollectionViewDataSource {
             return 1
         }
         
-        let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[section - 1] }
+        let itemForBrand = K.items.filter { $0.brand == K.brands[section - 1] }
 
-        return goggleForBrand.count
+        return itemForBrand.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -175,15 +184,13 @@ extension BuyGogglesController: UICollectionViewDataSource {
         cell.backgroundColor = .white
         
         
-        
-        
         //USE REALTIME DATABASE HERE...
-        let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section - 1] }
+        let itemForBrand = K.items.filter { $0.brand == K.brands[indexPath.section - 1] }
 
-        cell.imageView.sd_setImage(with: Storage.storage().reference().child(goggleForBrand[indexPath.row].vendorNo + ".png"))
-        cell.skuLabel.text = "\(goggleForBrand[indexPath.row].sku)" + " - " + goggleForBrand[indexPath.row].description + "\n" + ((goggleForBrand[indexPath.row].qtyOrdered != nil && goggleForBrand[indexPath.row].qtyOrdered! > 0) ? "Ordered: \(goggleForBrand[indexPath.row].qtyOrdered!)" : "")
+        cell.imageView.sd_setImage(with: Storage.storage().reference().child(itemForBrand[indexPath.row].vendorNo + ".png"))
+        cell.skuLabel.text = "\(itemForBrand[indexPath.row].TRSku)" + " - " + itemForBrand[indexPath.row].description + "\n" + ((itemForBrand[indexPath.row].qtyOrdered != nil && itemForBrand[indexPath.row].qtyOrdered! > 0) ? "Ordered: \(itemForBrand[indexPath.row].qtyOrdered!)" : "")
         
-        if (goggleForBrand[indexPath.row].qtyOrdered != nil && goggleForBrand[indexPath.row].qtyOrdered! > 0) {
+        if (itemForBrand[indexPath.row].qtyOrdered != nil && itemForBrand[indexPath.row].qtyOrdered! > 0) {
             cell.layer.borderWidth = 3
             cell.layer.cornerRadius = 10
             cell.layer.borderColor = UIColor(named: "colorHighlight")!.cgColor
@@ -193,17 +200,7 @@ extension BuyGogglesController: UICollectionViewDataSource {
             cell.layer.borderWidth = 0
             cell.clipsToBounds = false
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         
         return cell
     }
@@ -215,7 +212,7 @@ extension BuyGogglesController: UICollectionViewDataSource {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                          withReuseIdentifier: HeaderView.reuseIdentifier,
                                                                          for: indexPath) as! HeaderView
-            header.label.text = K.goggleBrands[indexPath.section - 1]
+            header.label.text = K.brands[indexPath.section - 1]
             header.configure()
             return header
         case UICollectionView.elementKindSectionFooter:
@@ -233,24 +230,17 @@ extension BuyGogglesController: UICollectionViewDataSource {
     
 // MARK: - UICollectionViewDelegate
 
-extension BuyGogglesController: UICollectionViewDelegate {
+extension Buy100Controller: UICollectionViewDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
-            let controller = segue.destination as! GoggleDetailController
+            let controller = segue.destination as! Buy100DetailController
             
             if let indexPath = collectionView.indexPathsForSelectedItems?.first {
-                let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section - 1] }
-                
-//                controller.vendorNo = goggleForBrand[indexPath.row].vendorNo
-//                controller.brand = goggleForBrand[indexPath.row].brand
-//                controller.refImage = goggleForBrand[indexPath.row].image
-//                controller.itemDescription = "\(goggleForBrand[indexPath.row].sku)" + " - " + goggleForBrand[indexPath.row].description
-//                controller.qtyAvailable = goggleForBrand[indexPath.row].qty
-//                controller.qtyOrdered = goggleForBrand[indexPath.row].qtyOrdered
+                let itemForBrand = K.items.filter { $0.brand == K.brands[indexPath.section - 1] }
 
-                //Firebase DB
-                controller.ref = ref.child(goggleForBrand[indexPath.row].vendorNo)
-                controller.item = goggleForBrand[indexPath.row]
+//                //Firebase DB
+//                controller.ref = ref.child(itemForBrand[indexPath.row].vendorNo)
+                controller.item = itemForBrand[indexPath.row]
                 
                 //Not sure about theses.....
                 controller.delegate = self
@@ -310,18 +300,18 @@ extension BuyGogglesController: UICollectionViewDelegate {
 }
 
 
-// MARK: - GoggleDetailControllerDelegate
+// MARK: - Buy100DetailControllerDelegate
 
-extension BuyGogglesController: GoggleDetailControllerDelegate {
-    func goggleDetailController(_ controller: GoggleDetailController, didUpdateQty qtyOrdered: Int, forVendorNo vendorNo: String) {
+extension Buy100Controller: Buy100DetailControllerDelegate {
+    func buy100DetailController(_ controller: Buy100DetailController, didUpdateQty qtyOrdered: Int, forVendorNo vendorNo: String) {
 
-//        K.goggleData.first(where: { $0.vendorNo == vendorNo })?.qtyOrdered = qty
-//        K.goggleData.filter { $0.vendorNo == vendorNo }.first?.qtyOrdered = qty
+//        K.items.first(where: { $0.vendorNo == vendorNo })?.qtyOrdered = qty
+//        K.items.filter { $0.vendorNo == vendorNo }.first?.qtyOrdered = qty
 
         //don't like this. Try something like above
-        for (i, data) in K.goggleData.enumerated() {
+        for (i, data) in K.items.enumerated() {
             if data.vendorNo == vendorNo {
-                K.goggleData[i].qtyOrdered = qtyOrdered == 0 ? nil : qtyOrdered
+                K.items[i].qtyOrdered = qtyOrdered == 0 ? nil : qtyOrdered
             }
         }
         
