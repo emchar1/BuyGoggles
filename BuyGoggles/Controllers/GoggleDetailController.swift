@@ -30,6 +30,7 @@ class GoggleDetailController: UIViewController {
     var delegate: GoggleDetailControllerDelegate?
     
     var ref: DatabaseReference!
+    var item: GoggleData!
     
     
     // MARK: - Initialization
@@ -39,6 +40,13 @@ class GoggleDetailController: UIViewController {
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapScreen))
         view.addGestureRecognizer(tapGestureRecognizer)
+        
+        vendorNo = item.vendorNo
+        refImage = item.image
+        brand = item.brand
+        itemDescription = "\(item.sku)" + " - " + item.description
+        qtyAvailable = item.qty
+        qtyOrdered = item.qtyOrdered
         
         setupViews()
     }
@@ -166,9 +174,22 @@ class GoggleDetailController: UIViewController {
             
         }
         else {
+            //Now update the DB ref
+            let itemRef: [String: Any] = ["TRQty": item.qty,
+                                          "TRSku": item.sku,
+                                          "category": item.category,
+                                          "description": item.description,
+                                          "imageName": item.vendorNo,
+                                          "model": item.brand,
+                                          "unitPrice": item.unitPrice,
+                                          "vendorPartNo": item.vendorNo,
+                                          "qtyOrdered": Int(textField.text!) ?? 0]
+            ref.setValue(itemRef)
+            
             delegate?.goggleDetailController(self,
                                              didUpdateQty: Int(textField.text!) ?? 0,
                                              forVendorNo: self.vendorNo)
+            print("qtyOrdered: \(Int(textField.text!) ?? 0)")
             dismiss(animated: true, completion: nil)
         }
     }

@@ -92,7 +92,7 @@ class BuyGogglesController: UIViewController {
                                               description: obj["description"] as! String,
                                               unitPrice: obj["unitPrice"] as? Float ?? 0,
                                               qty: obj["TRQty"] as? Int ?? 0,
-                                              qtyOrdered: nil,
+                                              qtyOrdered: obj["qtyOrdered"] as? Int,
                                               image: Storage.storage().reference().child((obj["vendorPartNo"] as! String) + ".png"))
                         K.goggleData.append(item)
                         
@@ -181,9 +181,9 @@ extension BuyGogglesController: UICollectionViewDataSource {
         let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section - 1] }
 
         cell.imageView.sd_setImage(with: Storage.storage().reference().child(goggleForBrand[indexPath.row].vendorNo + ".png"))
-        cell.skuLabel.text = "\(goggleForBrand[indexPath.row].sku)" + " - " + goggleForBrand[indexPath.row].description + "\n" + (goggleForBrand[indexPath.row].qtyOrdered != nil ? "Ordered: \(goggleForBrand[indexPath.row].qtyOrdered!)" : "")
+        cell.skuLabel.text = "\(goggleForBrand[indexPath.row].sku)" + " - " + goggleForBrand[indexPath.row].description + "\n" + ((goggleForBrand[indexPath.row].qtyOrdered != nil && goggleForBrand[indexPath.row].qtyOrdered! > 0) ? "Ordered: \(goggleForBrand[indexPath.row].qtyOrdered!)" : "")
         
-        if goggleForBrand[indexPath.row].qtyOrdered != nil {
+        if (goggleForBrand[indexPath.row].qtyOrdered != nil && goggleForBrand[indexPath.row].qtyOrdered! > 0) {
             cell.layer.borderWidth = 3
             cell.layer.cornerRadius = 10
             cell.layer.borderColor = UIColor(named: "colorHighlight")!.cgColor
@@ -241,15 +241,16 @@ extension BuyGogglesController: UICollectionViewDelegate {
             if let indexPath = collectionView.indexPathsForSelectedItems?.first {
                 let goggleForBrand = K.goggleData.filter { $0.brand == K.goggleBrands[indexPath.section - 1] }
                 
-                controller.vendorNo = goggleForBrand[indexPath.row].vendorNo
-                controller.brand = goggleForBrand[indexPath.row].brand
-                controller.refImage = goggleForBrand[indexPath.row].image
-                controller.itemDescription = "\(goggleForBrand[indexPath.row].sku)" + " - " + goggleForBrand[indexPath.row].description
-                controller.qtyAvailable = goggleForBrand[indexPath.row].qty
-                controller.qtyOrdered = goggleForBrand[indexPath.row].qtyOrdered
+//                controller.vendorNo = goggleForBrand[indexPath.row].vendorNo
+//                controller.brand = goggleForBrand[indexPath.row].brand
+//                controller.refImage = goggleForBrand[indexPath.row].image
+//                controller.itemDescription = "\(goggleForBrand[indexPath.row].sku)" + " - " + goggleForBrand[indexPath.row].description
+//                controller.qtyAvailable = goggleForBrand[indexPath.row].qty
+//                controller.qtyOrdered = goggleForBrand[indexPath.row].qtyOrdered
 
                 //Firebase DB
-                controller.ref = ref
+                controller.ref = ref.child(goggleForBrand[indexPath.row].vendorNo)
+                controller.item = goggleForBrand[indexPath.row]
                 
                 //Not sure about theses.....
                 controller.delegate = self

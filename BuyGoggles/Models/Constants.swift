@@ -22,7 +22,7 @@ struct K {
     static var goggleData: [GoggleData] = []
     static var goggleBrands: [String] = []
     static var shoppingCart: [GoggleData] {
-        return goggleData.filter { $0.qtyOrdered != nil }
+        return goggleData.filter { ($0.qtyOrdered != nil && $0.qtyOrdered! > 0) }
     }
     static var orderedBrands: [String] {
         var brands: [String] = []
