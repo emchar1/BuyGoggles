@@ -14,7 +14,7 @@ class CollectionCell: UICollectionViewCell {
     static let identifier = "CVCell"
     static let padding: CGFloat = 8
     static let widthImageView: CGFloat = UIScreen.main.bounds.width / 3 - padding * 1.5
-    static let heightImageView: CGFloat = widthImageView * 0.465
+    static let heightImageView: CGFloat = widthImageView //* 0.465
     static let heightDescriptionLabel: CGFloat = 60
     static let heightStack: CGFloat = heightImageView + heightDescriptionLabel
     
@@ -57,5 +57,13 @@ class CollectionCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented.")
+    }
+    
+    /**
+     Implement prepareForReuse to utilize the new cancel image loading from a url request.
+     */
+    override func prepareForReuse() {
+        imageView.image = nil
+        imageView.cancelImageLoad()
     }
 }

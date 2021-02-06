@@ -19,6 +19,7 @@ struct ItemModel: Comparable {
     var TRQty: Int
     var PUQty: Int
     var qtyOrdered: Int?
+    var imageURL: String                    //may be ""
     var image: StorageReference
 
     static func < (lhs: ItemModel, rhs: ItemModel) -> Bool {

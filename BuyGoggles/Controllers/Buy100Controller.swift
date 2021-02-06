@@ -15,6 +15,42 @@ class Buy100Controller: UIViewController {
     var ref: DatabaseReference!
     var orderIndexPath: IndexPath?
     
+    
+    
+    private let cache: NSCache<NSNumber, UIImage> = {
+        let cache = NSCache<NSNumber, UIImage>()
+        cache.countLimit = 75
+        cache.totalCostLimit = 50 * 1024 * 1024
+        return cache
+    }()
+    private let utilityQueue = DispatchQueue.global(qos: .utility)
+    private func loadImage(_ url: URL, completion: @escaping (UIImage?) -> ()) {
+        utilityQueue.async {
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard error == nil else {
+                    print(error!)
+                    return
+                }
+                
+                if let data = data, let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        completion(image)
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    
+    
+    lazy var floatingSectionLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: 8, y: 0, width: view.bounds.width, height: 60))
+        label.textColor = .black
+        label.font = UIFont(name: "Avenir Next Condensed Demi Bold Italic", size: 32)
+        return label
+    }()
+    
     lazy var titleSize: (width: CGFloat, height: CGFloat) = {
         let insetPadding: CGFloat = 8
         let width = view.frame.width - 2 * insetPadding
@@ -77,9 +113,10 @@ class Buy100Controller: UIViewController {
         
         //Firebase DB
         ref = Database.database().reference().child("Items")
-        let query = ref.queryOrdered(byChild: "category").queryEqual(toValue: "GOGGLES")
+//        let query = ref.queryOrdered(byChild: "category").queryEqual(toValue: "GOGGLES")
+//        let query = ref.queryOrdered(byChild: "TRQty").queryEqual(toValue: 0)
         
-        query.observe(DataEventType.value) { (snapshot) in
+        ref.observe(DataEventType.value) { (snapshot) in
             if snapshot.childrenCount > 0 {
                 K.items.removeAll()
                 
@@ -95,6 +132,7 @@ class Buy100Controller: UIViewController {
                                               TRQty: obj["TRQty"] as? Int ?? 0,
                                               PUQty: obj["PUQty"] as? Int ?? 0,
                                               qtyOrdered: obj["qtyOrdered"] as? Int,
+                                              imageURL: obj["ImageURL"] as! String,
                                               image: Storage.storage().reference().child((obj["vendorPartNo"] as! String) + ".png"))
                         K.items.append(item)
                         
@@ -115,9 +153,10 @@ class Buy100Controller: UIViewController {
         if let user = user {
             print("USER: \(user.uid), \(user.email ?? "No email")")
         }
+        
+        
+        view.addSubview(floatingSectionLabel)
     } //end viewDidLoad
-    
-    
 }
 
 
@@ -184,10 +223,57 @@ extension Buy100Controller: UICollectionViewDataSource {
         cell.backgroundColor = .white
         
         
+        
+        
+        
+        
+        
+        
         //USE REALTIME DATABASE HERE...
         let itemForBrand = K.items.filter { $0.brand == K.brands[indexPath.section - 1] }
+        
+        
+        
+        //New way of loading an image using my new async image url loading API!
+        //THIS USES SIMPLE ASYNC URL LOADING
+//        if let url = URL(string: itemForBrand[indexPath.row].imageURL) {
+//            cell.imageView.loadImage(at: url)
+//        }
+//        else {
+//            cell.imageView.image = UIImage(named: "noimg")
+//        }
+        
+        //HOWEVER, THIS ONE USES ASYNC + NSCACHING = WHAT WE WANT!!!
+        //2 Obtain the item number of the cell
+        let itemNumber = NSNumber(value: indexPath.item)
+        //3 If a cached image is found at the item number, retrieve it and assign it to the UIImageView
+        if let cachedImage = self.cache.object(forKey: itemNumber) {
+            print("Using a cached image for item: \(itemNumber)")
+            cell.imageView.image = cachedImage
+        }
+        else {
+            if let imageURL = URL(string: itemForBrand[indexPath.row].imageURL) {
+                //4 If there is no cached image at the item number, launch the image loading task. Upon image retrieval, assign the image to the UIImageView
+                self.loadImage(imageURL) { [weak self] (image) in
+                    guard let self = self, let image = image else { return }
 
-        cell.imageView.sd_setImage(with: Storage.storage().reference().child(itemForBrand[indexPath.row].vendorNo + ".png"))
+                    cell.imageView.image = image
+
+                    //5 Store the loaded image inside the NSCache for future reuse
+                    self.cache.setObject(image, forKey: itemNumber)
+                }
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         cell.skuLabel.text = "\(itemForBrand[indexPath.row].TRSku)" + " - " + itemForBrand[indexPath.row].description + "\n" + ((itemForBrand[indexPath.row].qtyOrdered != nil && itemForBrand[indexPath.row].qtyOrdered! > 0) ? "Ordered: \(itemForBrand[indexPath.row].qtyOrdered!)" : "")
         
         if (itemForBrand[indexPath.row].qtyOrdered != nil && itemForBrand[indexPath.row].qtyOrdered! > 0) {
@@ -200,6 +286,9 @@ extension Buy100Controller: UICollectionViewDataSource {
             cell.layer.borderWidth = 0
             cell.clipsToBounds = false
         }
+        
+        
+        
 
         
         return cell
@@ -225,6 +314,7 @@ extension Buy100Controller: UICollectionViewDataSource {
             return UICollectionReusableView()
         }
     }
+    
 }
     
     
@@ -295,8 +385,17 @@ extension Buy100Controller: UICollectionViewDelegate {
 //
 //        scrollHeightAnchor.constant = newHeight
 //        print("offset: \(scrollView.contentOffset.y), origin: \(scrollView.bounds.origin.y), anchor: \(scrollHeightAnchor.constant)")
+               
+        if let indexPath = collectionView.indexPathForItem(at: CGPoint(x: scrollView.frame.size.width / 2, y: scrollView.contentOffset.y)),
+           indexPath.section > 0 {
+            floatingSectionLabel.text = K.brands[indexPath.section - 1]
+        }
+        else {
+            floatingSectionLabel.text = ""
+        }
+        
+        
     }
-    
 }
 
 

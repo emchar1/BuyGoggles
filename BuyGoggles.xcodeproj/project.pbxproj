@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA2DA3A925CE719B00C36E79 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2DA3A825CE719B00C36E79 /* ImageLoader.swift */; };
 		EA46A0A12585F91D0076ECBB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0A02585F91D0076ECBB /* AppDelegate.swift */; };
 		EA46A0A32585F91D0076ECBB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0A22585F91D0076ECBB /* SceneDelegate.swift */; };
 		EA46A0A52585F91D0076ECBB /* Buy100Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA46A0A42585F91D0076ECBB /* Buy100Controller.swift */; };
@@ -33,6 +34,7 @@
 		15952DC030BE2D2441A4F620 /* Pods-BuyGoggles.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuyGoggles.release.xcconfig"; path = "Target Support Files/Pods-BuyGoggles/Pods-BuyGoggles.release.xcconfig"; sourceTree = "<group>"; };
 		AD37A9C447FD322DA7B50163 /* Pods_BuyGoggles.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuyGoggles.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E35EB6B717C7F115E06617CB /* Pods-BuyGoggles.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuyGoggles.debug.xcconfig"; path = "Target Support Files/Pods-BuyGoggles/Pods-BuyGoggles.debug.xcconfig"; sourceTree = "<group>"; };
+		EA2DA3A825CE719B00C36E79 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		EA46A09D2585F91D0076ECBB /* BuyGoggles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuyGoggles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA46A0A02585F91D0076ECBB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EA46A0A22585F91D0076ECBB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +88,27 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EA2DA3A525CE715000C36E79 /* CollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				EA95265925949CD800808F42 /* TitleCell.swift */,
+				EA46A0C125861DF70076ECBB /* CollectionCell.swift */,
+				EA46A0DC2588A5B40076ECBB /* HeaderView.swift */,
+				EA46A0DF2588AB690076ECBB /* FooterView.swift */,
+			);
+			path = CollectionView;
+			sourceTree = "<group>";
+		};
+		EA2DA3A725CE717100C36E79 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				EA46A0E52589BD230076ECBB /* Constants.swift */,
+				EA9FD857258F1866000E1CFB /* CreateCSV.swift */,
+				EA2DA3A825CE719B00C36E79 /* ImageLoader.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		EA46A0942585F91D0076ECBB = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +133,7 @@
 				EAE48F3925C32D9800709098 /* BuyGoggles.entitlements */,
 				EA46A0A02585F91D0076ECBB /* AppDelegate.swift */,
 				EA46A0A22585F91D0076ECBB /* SceneDelegate.swift */,
+				EA2DA3A725CE717100C36E79 /* Utilities */,
 				EA46A0BB2585FA370076ECBB /* Models */,
 				EA46A0B82585FA220076ECBB /* Controllers */,
 				EA46A0BA2585FA2E0076ECBB /* Views */,
@@ -136,11 +160,9 @@
 			isa = PBXGroup;
 			children = (
 				EA46A0A62585F91D0076ECBB /* Main.storyboard */,
-				EA95265925949CD800808F42 /* TitleCell.swift */,
-				EA46A0C125861DF70076ECBB /* CollectionCell.swift */,
-				EA46A0DC2588A5B40076ECBB /* HeaderView.swift */,
-				EA46A0DF2588AB690076ECBB /* FooterView.swift */,
+				EA2DA3A525CE715000C36E79 /* CollectionView */,
 				EA46A102258DEDB30076ECBB /* TableViewCell.swift */,
+				EA95266025968C6300808F42 /* SnowView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -149,9 +171,6 @@
 			isa = PBXGroup;
 			children = (
 				EA46A0BE2586046B0076ECBB /* ItemModel.swift */,
-				EA46A0E52589BD230076ECBB /* Constants.swift */,
-				EA9FD857258F1866000E1CFB /* CreateCSV.swift */,
-				EA95266025968C6300808F42 /* SnowView.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -277,6 +296,7 @@
 				EA95265A25949CD800808F42 /* TitleCell.swift in Sources */,
 				EAAC4A6525B6AB3D00260CAF /* LoginController.swift in Sources */,
 				EA46A0A12585F91D0076ECBB /* AppDelegate.swift in Sources */,
+				EA2DA3A925CE719B00C36E79 /* ImageLoader.swift in Sources */,
 				EA46A0C225861DF70076ECBB /* CollectionCell.swift in Sources */,
 				EA46A0FB258C96820076ECBB /* CheckoutController.swift in Sources */,
 				EA46A103258DEDB30076ECBB /* TableViewCell.swift in Sources */,

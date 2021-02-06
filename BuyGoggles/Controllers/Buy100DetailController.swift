@@ -20,6 +20,7 @@ class Buy100DetailController: UIViewController {
     let padding: CGFloat = 20
     var vendorNo: String!
     var refImage: StorageReference!
+    var imageURL: URL?
     var brand: String!
     var itemDescription: String!
     var qtyAvailable: Int = 0
@@ -43,6 +44,7 @@ class Buy100DetailController: UIViewController {
         
         vendorNo = item.vendorNo
         refImage = item.image
+        imageURL = URL(string: item.imageURL)
         brand = item.brand
         itemDescription = "\(item.TRSku)" + " - " + item.description
         qtyAvailable = item.TRQty
@@ -68,7 +70,13 @@ class Buy100DetailController: UIViewController {
                                      brandLabel.heightAnchor.constraint(equalToConstant: 60)])
 
         let imageView = UIImageView()
-        imageView.sd_setImage(with: refImage)
+        //New way of loading an image using my new async image url loading API!
+        if let imageURL = self.imageURL {
+            imageView.loadImage(at: imageURL)
+        }
+        else {
+            imageView.image = UIImage(named: "noimg")
+        }
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
