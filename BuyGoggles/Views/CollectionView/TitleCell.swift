@@ -23,7 +23,8 @@ class TitleCell: UICollectionViewCell {
         view.addSubview(itemImageView)
         
         let titleLabel = UILabel()
-        titleLabel.text = "100PRCNT®\nTUCKER POWERSPORTS\nMX COLLECTION\nGOGGLES"
+//        titleLabel.text = "100PRCNT®\nTUCKER POWERSPORTS\nMX COLLECTION\nGOGGLES"
+        titleLabel.text = "Buy 100%"
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "Baskerville", size: 26)
         titleLabel.textColor = .black

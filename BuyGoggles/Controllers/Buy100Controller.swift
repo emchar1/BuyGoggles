@@ -16,30 +16,32 @@ class Buy100Controller: UIViewController {
     var orderIndexPath: IndexPath?
     
     
-    
+    private let cacheURL: NSCache<NSURL, UIImage> = {
+        let cache = NSCache<NSURL, UIImage>()
+        cache.countLimit = 75
+        cache.totalCostLimit = 50 * 1024 * 1024
+        return cache
+    }()
     private let cache: NSCache<NSNumber, UIImage> = {
         let cache = NSCache<NSNumber, UIImage>()
         cache.countLimit = 75
         cache.totalCostLimit = 50 * 1024 * 1024
         return cache
     }()
-    private let utilityQueue = DispatchQueue.global(qos: .utility)
     private func loadImage(_ url: URL, completion: @escaping (UIImage?) -> ()) {
-        utilityQueue.async {
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                guard error == nil else {
-                    print(error!)
-                    return
-                }
-                
-                if let data = data, let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        completion(image)
-                    }
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard error == nil else {
+                print(error!)
+                return
+            }
+            
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    completion(image)
                 }
             }
-            task.resume()
         }
+        task.resume()
     }
     
     
@@ -236,34 +238,53 @@ extension Buy100Controller: UICollectionViewDataSource {
         
         //New way of loading an image using my new async image url loading API!
         //THIS USES SIMPLE ASYNC URL LOADING
+        if let url = URL(string: itemForBrand[indexPath.row].imageURL) {
+            cell.imageView.loadImage(at: url)
+        }
+        else {
+            cell.imageView.image = UIImage(named: "noimg")
+        }
+        
+        //VERSION 3... IS THIS THE ANSWER???
 //        if let url = URL(string: itemForBrand[indexPath.row].imageURL) {
-//            cell.imageView.loadImage(at: url)
+//            if let cachedImage = self.cacheURL.object(forKey: url as NSURL) {
+//                print("Using a cached image for item: \(url)")
+//                cell.imageView.image = cachedImage
+//            }
+//            else {
+//                cell.imageView.loadImage(at: url)
+//                cacheURL.setObject(cell.imageView.image ?? UIImage(), forKey: url as NSURL)
+//            }
 //        }
 //        else {
 //            cell.imageView.image = UIImage(named: "noimg")
 //        }
-        
-        //HOWEVER, THIS ONE USES ASYNC + NSCACHING = WHAT WE WANT!!!
-        //2 Obtain the item number of the cell
-        let itemNumber = NSNumber(value: indexPath.item)
-        //3 If a cached image is found at the item number, retrieve it and assign it to the UIImageView
-        if let cachedImage = self.cache.object(forKey: itemNumber) {
-            print("Using a cached image for item: \(itemNumber)")
-            cell.imageView.image = cachedImage
-        }
-        else {
-            if let imageURL = URL(string: itemForBrand[indexPath.row].imageURL) {
-                //4 If there is no cached image at the item number, launch the image loading task. Upon image retrieval, assign the image to the UIImageView
-                self.loadImage(imageURL) { [weak self] (image) in
-                    guard let self = self, let image = image else { return }
-
-                    cell.imageView.image = image
-
-                    //5 Store the loaded image inside the NSCache for future reuse
-                    self.cache.setObject(image, forKey: itemNumber)
-                }
-            }
-        }
+//
+//
+//
+//
+//
+//        //HOWEVER, THIS ONE USES ASYNC + NSCACHING = WHAT WE WANT!!!
+//        //2 Obtain the item number of the cell
+//        let itemNumber = NSNumber(value: indexPath.item)
+//        //3 If a cached image is found at the item number, retrieve it and assign it to the UIImageView
+//        if let cachedImage = cache.object(forKey: itemNumber) {
+//            print("Using a cached image for item: \(itemNumber)")
+//            cell.imageView.image = cachedImage
+//        }
+//        else {
+//            if let imageURL = URL(string: itemForBrand[indexPath.row].imageURL) {
+//                //4 If there is no cached image at the item number, launch the image loading task. Upon image retrieval, assign the image to the UIImageView
+//                loadImage(imageURL) { [weak self] (image) in
+//                    guard let self = self, let image = image else { return }
+//
+//                    cell.imageView.image = image
+//
+//                    //5 Store the loaded image inside the NSCache for future reuse
+//                    self.cache.setObject(image, forKey: itemNumber)
+//                }
+//            }
+//        }
         
         
         
@@ -385,16 +406,16 @@ extension Buy100Controller: UICollectionViewDelegate {
 //
 //        scrollHeightAnchor.constant = newHeight
 //        print("offset: \(scrollView.contentOffset.y), origin: \(scrollView.bounds.origin.y), anchor: \(scrollHeightAnchor.constant)")
+        
                
-        if let indexPath = collectionView.indexPathForItem(at: CGPoint(x: scrollView.frame.size.width / 2, y: scrollView.contentOffset.y)),
-           indexPath.section > 0 {
-            floatingSectionLabel.text = K.brands[indexPath.section - 1]
+        if let indexPath = collectionView.indexPathForItem(at: CGPoint(x: scrollView.frame.size.width / 2, y: scrollView.contentOffset.y)) {
+            if indexPath.section > 0 {
+                floatingSectionLabel.text = K.brands[indexPath.section - 1]
+            }
+            else {
+                floatingSectionLabel.text = ""
+            }
         }
-        else {
-            floatingSectionLabel.text = ""
-        }
-        
-        
     }
 }
 

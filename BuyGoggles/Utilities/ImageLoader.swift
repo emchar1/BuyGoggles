@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - UIImageView extension
 
-extension UIImageView {
+extension UIImageView {    
     func loadImage(at url: URL) {
         UIImageLoader.loader.load(url, for: self)
     }
@@ -28,13 +28,6 @@ class UIImageLoader {
     
     private let imageLoader = ImageLoader()
     private var uuidMap = [UIImageView: UUID]()
-    
-    private let cache: NSCache<NSNumber, UIImage> = {
-        let cache = NSCache<NSNumber, UIImage>()
-        cache.countLimit = 75
-        cache.totalCostLimit = 50 * 1024 * 1024
-        return cache
-    }()
     
     private init() {
         
@@ -77,9 +70,18 @@ class UIImageLoader {
 
 
 // MARK: - ImageLoader
-
 class ImageLoader {
-    private var loadedImages = [URL: UIImage]()
+    //OLD WAY
+//    private var loadedImages = [URL: UIImage]()
+    
+    //NEW WAY - cache
+    private let cache: NSCache<NSURL, UIImage> = {
+        let cache = NSCache<NSURL, UIImage>()
+        cache.countLimit = 75
+        cache.totalCostLimit = 50 * 1024 * 1024
+        return cache
+    }()
+    
     private var runningRequests = [UUID: URLSessionTask]()
     
     typealias Handler = (Result<UIImage, Error>) -> Void
@@ -87,7 +89,8 @@ class ImageLoader {
     func loadImage(_ url: URL, _ completion: @escaping Handler) -> UUID? {
         
         //1 If the URL already exists as a key in our in-memory cache, we can immediately call the completion handler. Since there is no active task and nothing to cancel later, we can return nil instead of a UUID instance.
-        if let image = loadedImages[url] {
+        if let image = self.cache.object(forKey: url as NSURL) {
+//        if let image = loadedImages[url] { //OLD WAY
             completion(.success(image))
             return nil
         }
@@ -101,7 +104,8 @@ class ImageLoader {
             
             //4 When the data task completes and we can extract an image from the result of the data task, it is cached in the in-memory cache and the completion handler is called with the loaded image. After this, we can return from the data task’s completion handler.
             if let data = data, let image = UIImage(data: data) {
-                self.loadedImages[url] = image
+                self.cache.setObject(image, forKey: url as NSURL)
+//                self.loadedImages[url] = image //OLD WAY
                 completion(.success(image))
                 return
             }
