@@ -22,29 +22,13 @@ class Buy100Controller: UIViewController {
         cache.totalCostLimit = 50 * 1024 * 1024
         return cache
     }()
+    
     private let cache: NSCache<NSNumber, UIImage> = {
         let cache = NSCache<NSNumber, UIImage>()
         cache.countLimit = 75
         cache.totalCostLimit = 50 * 1024 * 1024
         return cache
     }()
-    private func loadImage(_ url: URL, completion: @escaping (UIImage?) -> ()) {
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard error == nil else {
-                print(error!)
-                return
-            }
-            
-            if let data = data, let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    completion(image)
-                }
-            }
-        }
-        task.resume()
-    }
-    
-    
     
     lazy var floatingSectionLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: 8, y: 0, width: view.bounds.width, height: 60))
@@ -149,13 +133,11 @@ class Buy100Controller: UIViewController {
             }
         } //end query.observe...
         
-        
         //Check authentication
         let user = Auth.auth().currentUser
         if let user = user {
             print("USER: \(user.uid), \(user.email ?? "No email")")
         }
-        
         
         view.addSubview(floatingSectionLabel)
     } //end viewDidLoad
@@ -224,17 +206,8 @@ extension Buy100Controller: UICollectionViewDataSource {
         
         cell.backgroundColor = .white
         
-        
-        
-        
-        
-        
-        
-        
         //USE REALTIME DATABASE HERE...
         let itemForBrand = K.items.filter { $0.brand == K.brands[indexPath.section - 1] }
-        
-        
         
         //New way of loading an image using my new async image url loading API!
         //THIS USES SIMPLE ASYNC URL LOADING
@@ -244,55 +217,6 @@ extension Buy100Controller: UICollectionViewDataSource {
         else {
             cell.imageView.image = UIImage(named: "noimg")
         }
-        
-        //VERSION 3... IS THIS THE ANSWER???
-//        if let url = URL(string: itemForBrand[indexPath.row].imageURL) {
-//            if let cachedImage = self.cacheURL.object(forKey: url as NSURL) {
-//                print("Using a cached image for item: \(url)")
-//                cell.imageView.image = cachedImage
-//            }
-//            else {
-//                cell.imageView.loadImage(at: url)
-//                cacheURL.setObject(cell.imageView.image ?? UIImage(), forKey: url as NSURL)
-//            }
-//        }
-//        else {
-//            cell.imageView.image = UIImage(named: "noimg")
-//        }
-//
-//
-//
-//
-//
-//        //HOWEVER, THIS ONE USES ASYNC + NSCACHING = WHAT WE WANT!!!
-//        //2 Obtain the item number of the cell
-//        let itemNumber = NSNumber(value: indexPath.item)
-//        //3 If a cached image is found at the item number, retrieve it and assign it to the UIImageView
-//        if let cachedImage = cache.object(forKey: itemNumber) {
-//            print("Using a cached image for item: \(itemNumber)")
-//            cell.imageView.image = cachedImage
-//        }
-//        else {
-//            if let imageURL = URL(string: itemForBrand[indexPath.row].imageURL) {
-//                //4 If there is no cached image at the item number, launch the image loading task. Upon image retrieval, assign the image to the UIImageView
-//                loadImage(imageURL) { [weak self] (image) in
-//                    guard let self = self, let image = image else { return }
-//
-//                    cell.imageView.image = image
-//
-//                    //5 Store the loaded image inside the NSCache for future reuse
-//                    self.cache.setObject(image, forKey: itemNumber)
-//                }
-//            }
-//        }
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         cell.skuLabel.text = "\(itemForBrand[indexPath.row].TRSku)" + " - " + itemForBrand[indexPath.row].description + "\n" + ((itemForBrand[indexPath.row].qtyOrdered != nil && itemForBrand[indexPath.row].qtyOrdered! > 0) ? "Ordered: \(itemForBrand[indexPath.row].qtyOrdered!)" : "")
@@ -307,10 +231,6 @@ extension Buy100Controller: UICollectionViewDataSource {
             cell.layer.borderWidth = 0
             cell.clipsToBounds = false
         }
-        
-        
-        
-
         
         return cell
     }
@@ -387,26 +307,6 @@ extension Buy100Controller: UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         navigationItem.titleView?.alpha = (scrollView.contentOffset.y - titleSize.height / 2) / (titleSize.height / 2)
-//        if navigationItem.titleView!.alpha >= 1.0 {
-//            appearance.shadowColor = .lightGray
-//            navigationController?.navigationBar.standardAppearance = appearance
-//        }
-        
-//        if scrollView.contentOffset.y > view.frame.width - 16 {
-//            navigationController?.setNavigationBarHidden(false, animated: true)
-//        }
-//        else {
-//            navigationController?.setNavigationBarHidden(true, animated: true)
-//        }
-//        let newHeight = scrollHeightAnchor.constant - scrollView.contentOffset.y / 2
-//        
-//        guard newHeight > 0 && newHeight < scrollHeightMax else {
-//            return
-//        }
-//
-//        scrollHeightAnchor.constant = newHeight
-//        print("offset: \(scrollView.contentOffset.y), origin: \(scrollView.bounds.origin.y), anchor: \(scrollHeightAnchor.constant)")
-        
                
         if let indexPath = collectionView.indexPathForItem(at: CGPoint(x: scrollView.frame.size.width / 2, y: scrollView.contentOffset.y)) {
             if indexPath.section > 0 {
@@ -439,5 +339,4 @@ extension Buy100Controller: Buy100DetailControllerDelegate {
         
         collectionView.reloadData()
     }
-    
 }
