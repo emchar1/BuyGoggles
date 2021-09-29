@@ -7,7 +7,7 @@
 
 import UIKit
 //import FirebaseDatabase
-import FirebaseUI
+import Firebase
 
 protocol Buy100DetailControllerDelegate {
     func buy100DetailController(_ controller: Buy100DetailController, didUpdateQty qtyOrdered: Int, forVendorNo vendorNo: String)

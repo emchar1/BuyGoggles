@@ -7,7 +7,7 @@
 
 import UIKit
 import Firebase
-import FirebaseUI
+//import FirebaseUI
 
 class Buy100Controller: UIViewController {
     
@@ -34,6 +34,7 @@ class Buy100Controller: UIViewController {
         let label = UILabel(frame: CGRect(x: 8, y: 0, width: view.bounds.width, height: 60))
         label.textColor = .black
         label.font = UIFont(name: "Avenir Next Condensed Demi Bold Italic", size: 32)
+        label.backgroundColor = .white
         return label
     }()
     
@@ -118,7 +119,7 @@ class Buy100Controller: UIViewController {
                                               TRQty: obj["TRQty"] as? Int ?? 0,
                                               PUQty: obj["PUQty"] as? Int ?? 0,
                                               qtyOrdered: obj["qtyOrdered"] as? Int,
-                                              imageURL: obj["ImageURL"] as! String,
+                                              imageURL: obj["ImageURL"] as? String ?? "",
                                               image: Storage.storage().reference().child((obj["vendorPartNo"] as! String) + ".png"))
                         K.items.append(item)
                         
@@ -308,7 +309,8 @@ extension Buy100Controller: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         navigationItem.titleView?.alpha = (scrollView.contentOffset.y - titleSize.height / 2) / (titleSize.height / 2)
                
-        if let indexPath = collectionView.indexPathForItem(at: CGPoint(x: scrollView.frame.size.width / 2, y: scrollView.contentOffset.y)) {
+        if let indexPath = collectionView.indexPathForItem(at: CGPoint(x: scrollView.frame.size.width / 2,
+                                                                       y: scrollView.contentOffset.y)) {
             if indexPath.section > 0 {
                 floatingSectionLabel.text = K.brands[indexPath.section - 1]
             }
