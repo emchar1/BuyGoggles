@@ -20,8 +20,9 @@ class CollectionCell: UICollectionViewCell {
     
     var imageView: UIImageView = {
         let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
+        iv.contentMode = .scaleAspectFit
+//        iv.backgroundColor = .green
+//        iv.clipsToBounds = true
         return iv
     }()
     

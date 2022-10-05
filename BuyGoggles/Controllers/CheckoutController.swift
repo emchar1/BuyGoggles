@@ -150,16 +150,20 @@ class CheckoutController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        emptyCartLabel.isHidden = K.shoppingCart.isEmpty ? false : true
-        shoppingCartTitle.isHidden = K.shoppingCart.isEmpty ? true : false
-        tableView.isHidden = K.shoppingCart.isEmpty ? true : false
-        checkoutButton.isHidden = K.shoppingCart.isEmpty ? true : false
-
+        toggleLabels()
+        
         //Resize the tableView height to its content size.
         tableView.frame.size.height = tableView.contentSize.height
         scrollView.contentSize.height = scrollHeight
         
         
+    }
+    
+    private func toggleLabels() {
+        emptyCartLabel.isHidden = K.shoppingCart.isEmpty ? false : true
+        shoppingCartTitle.isHidden = K.shoppingCart.isEmpty ? true : false
+        tableView.isHidden = K.shoppingCart.isEmpty ? true : false
+        checkoutButton.isHidden = K.shoppingCart.isEmpty ? true : false
     }
 }
 
@@ -296,6 +300,8 @@ extension CheckoutController: MFMailComposeViewControllerDelegate {
                         
         }
         
+//        K.items.removeAll()
+//        tableView.reloadData()
         mailOrder(for: CreateCSV.commaSeparatedValueDataForLines(lines: csvItems))
     }
     
@@ -313,7 +319,7 @@ extension CheckoutController: MFMailComposeViewControllerDelegate {
         formatter.dateFormat = "MM/dd/yyyy h:mm a"
 
         mail.mailComposeDelegate = self
-        mail.setToRecipients(["grady@100percent.com"])
+        mail.setToRecipients(["eddie@100percent.com"])
         mail.setSubject("Order #\(orderNo) - \(formatter.string(from: date))")
         mail.setMessageBody("Make it rain.", isHTML: true)
         mail.addAttachmentData(data, mimeType: "text/csv", fileName: "Items\(orderNo).csv")
@@ -323,6 +329,17 @@ extension CheckoutController: MFMailComposeViewControllerDelegate {
     
     //This is required to dismiss the mail controller!
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        if result == .sent {
+            for (i, _) in K.items.enumerated() {
+                K.items[i].qtyOrdered = nil
+            }
+
+            tabBarController?.tabBar.items?.last?.badgeValue = nil
+            toggleLabels()
+
+            print("Shopping cart is empty? \(K.shoppingCart.isEmpty)")
+        }
+
         controller.dismiss(animated: true)
     }
 }

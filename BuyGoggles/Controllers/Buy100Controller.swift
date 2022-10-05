@@ -14,7 +14,8 @@ class Buy100Controller: UIViewController {
     // MARK: - Properties
     var ref: DatabaseReference!
     var orderIndexPath: IndexPath?
-    
+    var hm: HamburgerMenu!
+
     
     private let cacheURL: NSCache<NSURL, UIImage> = {
         let cache = NSCache<NSURL, UIImage>()
@@ -34,7 +35,7 @@ class Buy100Controller: UIViewController {
         let label = UILabel(frame: CGRect(x: 8, y: 0, width: view.bounds.width, height: 60))
         label.textColor = .black
         label.font = UIFont(name: "Avenir Next Condensed Demi Bold Italic", size: 32)
-        label.backgroundColor = .white
+//        label.backgroundColor = .white
         return label
     }()
     
@@ -74,13 +75,17 @@ class Buy100Controller: UIViewController {
         
         collectionView.delegate = self
         collectionView.dataSource = self
-        
         view.addSubview(collectionView)
-        
         NSLayoutConstraint.activate([collectionView.topAnchor.constraint(equalTo: view.topAnchor),
                                      collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                                      view.trailingAnchor.constraint(equalTo: collectionView.trailingAnchor),
                                      view.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)])
+
+        // FIXME: - I'm broken
+        hm = HamburgerMenu()
+        view.addSubview(hm)
+        hm.setConstraints()
+        
 
         //What is this mish mosh mess?
         let logoImageView = UIImageView()
@@ -104,8 +109,8 @@ class Buy100Controller: UIViewController {
 //        let query = ref.queryOrdered(byChild: "TRQty").queryEqual(toValue: 0)
         
         ref.observe(DataEventType.value) { (snapshot) in
-            if snapshot.childrenCount > 0 {
-                K.items.removeAll()
+//            if snapshot.childrenCount > 0 {
+//                K.items.removeAll()
                 
                 for itemSnapshot in snapshot.children.allObjects as! [DataSnapshot] {
                     if let obj = itemSnapshot.value as? [String: AnyObject] {
@@ -118,20 +123,23 @@ class Buy100Controller: UIViewController {
                                               unitPrice: obj["unitPrice"] as? Float ?? 0,
                                               TRQty: obj["TRQty"] as? Int ?? 0,
                                               PUQty: obj["PUQty"] as? Int ?? 0,
-                                              qtyOrdered: obj["qtyOrdered"] as? Int,
+                                              qtyOrdered: nil,//obj["qtyOrdered"] as? Int,
                                               imageURL: obj["ImageURL"] as? String ?? "",
                                               image: Storage.storage().reference().child((obj["vendorPartNo"] as! String) + ".png"))
-                        K.items.append(item)
                         
-                        //Populate the unique item brands
-                        if !K.brands.contains(item.brand) {
-                            K.brands.append(item.brand)
+                        if item.TRQty > 0 {
+                            K.items.append(item)
+                            
+                            //Populate the unique item brands
+                            if !K.brands.contains(item.brand) {
+                                K.brands.append(item.brand)
+                            }
+                            
+                            self.collectionView.reloadData()
                         }
-                        
-                        self.collectionView.reloadData()
                     }
                 }
-            }
+//            }
         } //end query.observe...
         
         //Check authentication
@@ -142,6 +150,10 @@ class Buy100Controller: UIViewController {
         
         view.addSubview(floatingSectionLabel)
     } //end viewDidLoad
+    
+    override func viewWillAppear(_ animated: Bool) {
+        collectionView.reloadData()
+    }
 }
 
 
@@ -180,7 +192,6 @@ extension Buy100Controller: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionViewDataSource
 
 extension Buy100Controller: UICollectionViewDataSource {
-        
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return K.brands.count + 1
     }
@@ -206,7 +217,9 @@ extension Buy100Controller: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionCell.identifier, for: indexPath) as! CollectionCell
         
         cell.backgroundColor = .white
-        
+        cell.imageView.contentMode = .scaleAspectFit
+        cell.clipsToBounds = true
+
         //USE REALTIME DATABASE HERE...
         let itemForBrand = K.items.filter { $0.brand == K.brands[indexPath.section - 1] }
         
@@ -220,17 +233,17 @@ extension Buy100Controller: UICollectionViewDataSource {
         }
         
         
-        cell.skuLabel.text = "\(itemForBrand[indexPath.row].TRSku)" + " - " + itemForBrand[indexPath.row].description + "\n" + ((itemForBrand[indexPath.row].qtyOrdered != nil && itemForBrand[indexPath.row].qtyOrdered! > 0) ? "Ordered: \(itemForBrand[indexPath.row].qtyOrdered!)" : "")
+        cell.skuLabel.text = "\(itemForBrand[indexPath.row].TRSku)" + "\n" + itemForBrand[indexPath.row].description + "\n" + ((itemForBrand[indexPath.row].qtyOrdered != nil && itemForBrand[indexPath.row].qtyOrdered! > 0) ? "Ordered: \(itemForBrand[indexPath.row].qtyOrdered!)" : "")
         
         if (itemForBrand[indexPath.row].qtyOrdered != nil && itemForBrand[indexPath.row].qtyOrdered! > 0) {
             cell.layer.borderWidth = 3
             cell.layer.cornerRadius = 10
             cell.layer.borderColor = UIColor(named: "colorHighlight")!.cgColor
-            cell.clipsToBounds = true
+//            cell.clipsToBounds = true
         }
         else {
             cell.layer.borderWidth = 0
-            cell.clipsToBounds = false
+//            cell.clipsToBounds = true
         }
         
         return cell
@@ -313,9 +326,11 @@ extension Buy100Controller: UICollectionViewDelegate {
                                                                        y: scrollView.contentOffset.y)) {
             if indexPath.section > 0 {
                 floatingSectionLabel.text = K.brands[indexPath.section - 1]
+                floatingSectionLabel.backgroundColor = .white
             }
             else {
                 floatingSectionLabel.text = ""
+                floatingSectionLabel.backgroundColor = .clear
             }
         }
     }

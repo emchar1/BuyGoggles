@@ -51,6 +51,7 @@ class Buy100DetailController: UIViewController {
         qtyOrdered = item.qtyOrdered
         
         setupViews()
+        registerForKeyboardNotifications()
     }
     
     func setupViews() {
@@ -77,7 +78,7 @@ class Buy100DetailController: UIViewController {
         else {
             imageView.image = UIImage(named: "noimg")
         }
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
@@ -150,13 +151,14 @@ class Buy100DetailController: UIViewController {
         qtyLabel.font = UIFont(name: "Avenir Next Condensed Italic", size: 12)
         qtyLabel.textColor = .gray
         qtyLabel.textAlignment = .center
-        qtyLabel.text = "Available qty: \(qtyAvailable)"
+        qtyLabel.text = "Available qty: \(qtyAvailable)\n\(vendorNo ?? "nil")"
+        qtyLabel.numberOfLines = 0
         qtyLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(qtyLabel)
         NSLayoutConstraint.activate([qtyLabel.topAnchor.constraint(equalTo: saveButton.bottomAnchor, constant: padding),
                                      qtyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      qtyLabel.widthAnchor.constraint(equalToConstant: 200),
-                                     qtyLabel.heightAnchor.constraint(equalToConstant: 20)])
+                                     qtyLabel.heightAnchor.constraint(equalToConstant: 40)])
 
     }
     
@@ -283,5 +285,34 @@ extension Buy100DetailController: UITextFieldDelegate {
                 self.invalidQtyLabel.alpha = 0.0
             }, completion: nil)
         })
+    }
+}
+
+
+extension Buy100DetailController {
+    func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardIsPresenting(_ :)),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardIsDismissing(_ :)),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    
+    @objc private func keyboardIsPresenting(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+
+            if view.frame.origin.y > -keyboardHeight / 2 {
+                view.frame.origin.y = -keyboardHeight / 2
+            }
+        }
+    }
+    
+    @objc private func keyboardIsDismissing(_ notification: Notification) {
+        view.frame.origin.y = 0
     }
 }
